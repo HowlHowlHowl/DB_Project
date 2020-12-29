@@ -1,0 +1,22 @@
+{
+  "name": "db_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HowlHowlHowl/DB_Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HowlHowlHowl/DB_Project/issues"
+  },
+  "homepage": "https://github.com/HowlHowlHowl/DB_Project#readme",
+  "dependencies": {
+    "sqlite3": "^5.0.0"
+  }
+}
