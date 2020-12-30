@@ -35,9 +35,23 @@ app.get('/example', (req,res) =>{
 	});
 })
 
+app.get('/table/:name', (req,res) => {
+	let table = req.params.name.replace(/\W/g, '');
+	db.all(`select * from ${table}`, (err, rows) => {
+		if(err) {
+			console.log(err);
+			return res.status(400).end();
+		}
+
+		return res.json(rows);
+	});
+});
+
 app.listen(8000, ()=>{
 	console.log("Server is listening");
 });
+
+
 
 /* close the database connection
 db.close((err) => {
