@@ -19,7 +19,6 @@ let db = new sqlite3.Database(path.join(__dirname,'prova.db'),(err) => {
 
 app.get('/', (req,res) =>{
 	res.status(200).sendFile(path.join(__dirname,'index.html'));
-
 })
 
 function ins_azienda(az){

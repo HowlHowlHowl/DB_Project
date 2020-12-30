@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="it">
+<html lang="it" style="height:100%">
 <head>
 	<title>Progetto DB</title>
 	<meta charset="utf-8">
@@ -12,7 +12,6 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-
 	<script type="text/javascript">
 		function getData() {
 			$(document).ready(function () {
@@ -43,7 +42,8 @@
 				}
 			});
 		}
-		function displayTable(table) {
+		function displayTable() {
+			let table = $('#tables').val();
 			let db_table = document.createElement('table');
 			let thead = document.createElement('thead');
 			db_table.appendChild(
@@ -53,7 +53,7 @@
 			);
 			let tbody = document.createElement('tbody');
 			table.forEach((element) => {
-                let tr = document.createElement(tr);
+				let tr = document.createElement(tr);
 				Object.keys(element).forEach((key) => {
 					tr.innerHTML(tr.innerHTML() + '<td>' + element[key] + '</td>');	
 				});
@@ -68,14 +68,68 @@
 			});
 			let tr = document.createElement('tr');
 			return tr.innerHTML(header);
-        }
+		}
+
+		function changeForm() {
+			let table = $('#tables').val();
+			console.log(table)
+			if(table =='produttore' || table =='fornitore' || table=='azienda_trasporti') {
+				$('#form').html(`<div class="form-group">
+					<label for="partita_iva">P.I.</label>
+					<input type="text" class="form-control" id="partita_iva" placeholder="11111111111">
+					</div>
+					<div class="form-group">
+						<label for="nome">Nome</label>
+						<input type="text" class="form-control" id="nome" placeholder="">
+					</div>
+					<div class="form-group">
+						<label for="ragione_sociale">Ragione sociale</label>
+						<input type="text" class="form-control" id="ragione_sociale" placeholder="Bianchi & Rossi S.a.s.">
+					</div>`);
+			}
+			else if(table == 'prodotto') {
+				$('#form').html(`<div class="form-group">
+					<label for="ean">Codice EAN</label>
+					<input type="text" class="form-control" id="ean" placeholder="1111111111111">
+					</div>
+					<div class="form-group">
+						<label for="nome">Nome</label>
+						<input type="text" class="form-control" id="nome" placeholder="Mozzarella">
+					</div>
+					<div class="form-group">
+						<label for="peso">Peso</label>
+						<input type="text" class="form-control" id="peso" placeholder="200g">
+					</div>
+					<div class="form-group">
+						<label for="data">Data</label>
+						<input type="text" class="form-control" id="data" placeholder="30/12/2020">
+					</div>
+					<div class="form-group">
+						<label for="package">Package</label>
+						<input type="text" class="form-control" id="package" placeholder="">
+					</div>
+					<div class="form-group">
+						<label for="azienda_trasporti">Azienda di trasporto</label>
+						<input type="text" class="form-control" id="azienda_trasporti" placeholder="">
+					</div>
+					<div class="form-group">
+						<label for="tipo_trasporto">Tipo di trasporto</label>
+						<input type="text" class="form-control" id="tipo_trasporto" placeholder="">
+					</div>
+					<div class="form-group">
+						<label for="produttore">Azienda produttrice</label>
+						<input type="text" class="form-control" id="azienda_produttrice" placeholder="">
+					</div>`);
+			}
+		}
 	</script>
 </head>
 
-	<body>
-		<div id="commands" style="width:100vw; height:20vh; border: outset 5px;">
-			<label for="tables">Tabella da visualizzare</label>
-			<select id="tables" onchange="getTable(this)">
+	<body style="background-color: black; color: white; height:100%">
+		<div id="commands" style="width:50%; height: 100%; float: left; border-right: 1px solid rgba(255, 255, 255, 0.4); padding: 2rem">
+			<div style=" padding-bottom: 2rem;">
+			<label for="tables">Seleziona tabella</label>
+			<select id="tables" onchange="changeForm()">
 				<option value="produttore">Produttore</option>
 				<option value="fornitore">Fornitore</option>
 				<option value="azienda_trasporti">Azienda di Trasporti</option>
@@ -90,13 +144,31 @@
 				<option value="utilizzo_fertilizzante">Utilizzo Fertilizzante</option>
 				<option value="alimentazione">Alimentazione</option>
 			</select>
-			<br />
-			<button>
-				Aggiungi
+			<button onclick="getTable()">
+				Visualizza tabella
 			</button>
+			</div>
+			<div id="parameters">
+				<p>Campi di inserimento</p>
+				<form id="form">
+					<div class="form-group">
+					  <label for="partita_iva">P.I.</label>
+					  <input type="text" class="form-control" id="partita_iva" placeholder="11111111111">
+					</div>
+					<div class="form-group">
+						<label for="nome">Nome</label>
+						<input type="text" class="form-control" id="nome" placeholder="">
+					</div>
+					<div class="form-group">
+						<label for="ragione_sociale">Ragione sociale</label>
+						<input type="text" class="form-control" id="ragione_sociale" placeholder="Bianchi & Rossi S.a.s.">
+					</div>
+				</form>
+			</div>
 		</div>
-		<div id="display">
+		<div id="display" style="width:50%; height: 100%; float:right; padding: 2rem">
+			<p>Visualizzazione</p>
+		</div>
 
-		</div>
 	</body>
 </html>
