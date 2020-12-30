@@ -18,7 +18,7 @@ CREATE TABLE prodotto(
 	nome VARCHAR(20),
 	valore_di_impatto DOUBLE NOT NULL,
 	peso DOUBLE NOT NULL,
-	data DATE,
+	data DATE NOT NULL ,
 	azienda_trasporti VARCHAR(11) NOT NULL,
 	tipo_trasporto VARCHAR(20), 
 	CO2_trasporto DOUBLE NOT NULL,
@@ -26,14 +26,16 @@ CREATE TABLE prodotto(
 	produttore VARCHAR(11) NOT NULL, 
 	FOREIGN KEY(azienda_trasporti) REFERENCES azienda_trasporti(partita_iva),
 	FOREIGN KEY(package) REFERENCES package(codice),
-	FOREIGN KEY(produttore) REFERENCES produttore(partita_iva)
+	FOREIGN KEY(produttore) REFERENCES produttore(partita_iva),
+	CHECK(peso>0)
 );
 CREATE TABLE package(
 	codice INT NOT NULL PRIMARY KEY,
 	tipo VARCHAR(20),
 	materiale VARCHAR(20),
 	volume DOUBLE,
-	peso DOUBLE 
+	peso DOUBLE,
+	CHECK(peso>0)
 );
 CREATE TABLE procedura_lavorazione(
     tipo VARCHAR(20) NOT NULL PRIMARY KEY,
@@ -114,8 +116,7 @@ CREATE TABLE alimentazione(
 	luogo_materia_prima VARCHAR(20) NOT NULL,
 	mangime VARCHAR(10) NOT NULL,
 	quantità DOUBLE,
-	FOREIGN KEY (nome_materia_prima, luogo_materia_prima) REFERENCES
-	materia_prima(nome, luogo),
+	FOREIGN KEY (nome_materia_prima, luogo_materia_prima) REFERENCES materia_prima(nome, luogo),
 	FOREIGN KEY (mangime) REFERENCES mangime(nome),
 	PRIMARY KEY(nome_materia_prima, luogo_materia_prima, mangime)
 )
