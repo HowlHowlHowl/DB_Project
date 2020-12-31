@@ -23,6 +23,9 @@ app.get('/', (req,res) =>{
 	res.status(200).sendFile(path.join(__dirname,'index.html'));
 })
 
+app.get('/index.js', (req,res) =>{
+	res.status(200).sendFile(path.join(__dirname,'index.js'));
+})
 
 //route to insert data into tables
 app.post('/insertData', (req,res) =>{
