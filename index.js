@@ -49,9 +49,10 @@ function changeTypeMP() {
     let type_mp = $('#tipologia').val();
     if(type_mp == 'animale') {
         pesticidi = []; fertilizzanti = [];
-        $('#form_fertilizzanti').remove();
-        $('#form_pesticidi').remove();
+        $('#div_fertilizzanti').remove();
+        $('#div_pesticidi').remove();
         $('#parameters').append(`
+            <div id="div_mangimi">
             <form id="form_mangimi">
                 <p> Aggiungi i mangimi utilizzati per la materia prima inserita </p>
                 <div class="form-group">
@@ -64,12 +65,14 @@ function changeTypeMP() {
                 </div>
                 <input type="submit" value="Aggiungi">
             </form>
-            <ul id="lista_mangimi"></ul>`);
+            <ul id="lista_mangimi"></ul>
+            </div>`);
     }
     if(type_mp == 'vegetale') {
         mangimi = [];
-        $('#form_mangimi').remove();
+        $('#div_mangimi').remove();
         $('#parameters').append(`
+            <div id="div_fertilizzanti">
             <form id="form_fertilizzanti">
                 <p> Aggiungi i fertilizzanti utilizzati per la materia prima inserita </p>
                 <div class="form-group">
@@ -82,8 +85,10 @@ function changeTypeMP() {
                 </div>
                 <input type="submit" value="Aggiungi">
             </form>
-            <ul id="lista_fertilizzanti"></ul>`);
+            <ul id="lista_fertilizzanti"></ul>
+            </div>`);
         $('#parameters').append(`
+            <div id="div_pesticidi">
             <form id="form_pesticidi">
                 <p> Aggiungi i pesticidi utilizzati per la materia prima inserita </p>
                 <div class="form-group">
@@ -96,16 +101,17 @@ function changeTypeMP() {
                 </div>
                 <input type="submit" value="Aggiungi">
             </form>
-            <ul id="lista_pesticidi"></ul>`);
+            <ul id="lista_pesticidi"></ul>
+            </div>`);
     }
 }
 function changeForm() {
     let table = $('#tables').val();
 
     /* remove additional forms */
-    $('#form_mangimi').remove();
-    $('#form_fertilizzanti').remove();
-    $('#form_pesticidi').remove();
+    $('#div_mangimi').remove();
+    $('#div_fertilizzanti').remove();
+    $('#div_pesticidi').remove();
     /* clear arrays */
     fertilizzanti = []; pesticidi = []; mangimi = [];
 
