@@ -1,6 +1,8 @@
 var fertilizzanti = [];
 var pesticidi = [];
 var mangimi = [];
+var materie_prime = [];
+var lavorazioni = [];
 
 /* form management functions */
 
@@ -45,13 +47,15 @@ function getHeader() {
     return tr.innerHTML(header);
 }
 
+
+
 function changeTypeMP() {
     let type_mp = $('#tipologia').val();
     if(type_mp == 'animale') {
         pesticidi = []; fertilizzanti = [];
         $('#div_fertilizzanti').remove();
         $('#div_pesticidi').remove();
-        $('#parameters').append(`
+        $('#parameters').html(`
             <div id="div_mangimi">
             <form id="form_mangimi">
                 <p> Aggiungi i mangimi utilizzati per la materia prima inserita </p>
@@ -71,7 +75,7 @@ function changeTypeMP() {
     if(type_mp == 'vegetale') {
         mangimi = [];
         $('#div_mangimi').remove();
-        $('#parameters').append(`
+        $('#parameters').html(`
             <div id="div_fertilizzanti">
             <form id="form_fertilizzanti">
                 <p> Aggiungi i fertilizzanti utilizzati per la materia prima inserita </p>
@@ -87,7 +91,7 @@ function changeTypeMP() {
             </form>
             <ul id="lista_fertilizzanti"></ul>
             </div>`);
-        $('#parameters').append(`
+        $('#parameters').html(`
             <div id="div_pesticidi">
             <form id="form_pesticidi">
                 <p> Aggiungi i pesticidi utilizzati per la materia prima inserita </p>
@@ -112,8 +116,11 @@ function changeForm() {
     $('#div_mangimi').remove();
     $('#div_fertilizzanti').remove();
     $('#div_pesticidi').remove();
+    $('#div_materie_prime').remove();
+    $('#div_lavorazione').remove();
     /* clear arrays */
     fertilizzanti = []; pesticidi = []; mangimi = [];
+    materie_prime = []; lavorazioni = [];
 
     $('#form_mangimi').remove();
     if(table =='produttore' || table =='fornitore' || table=='azienda_trasporti') {
@@ -162,7 +169,40 @@ function changeForm() {
             <div class="form-group">
                 <label for="produttore">Azienda produttrice</label>
                 <input type="text" class="form-control" id="azienda_produttrice" placeholder="">
+            </div>
+            `);
+        if(!('$div_materie_prime').length > 0) {
+            $('#parameters').append(`
+            <div id="div_materie_prime">
+            <form id="form_materie_prime">
+                <p> Aggiungi le materie prime che compongono il prodotto </p>
+                <div class="form-group">
+                    <label for="nome_materia_prima">Nome</label>
+                    <input type="text" class="form-control" id="nome_materia_prima" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="luogo_materia_prima">Luogo</label>
+                    <input type="text" class="form-control" id="luogo_materia_prima" placeholder="">
+                </div>
+                <input type="submit" value="Aggiungi">
+            </form>
+            <ul id="lista_materie_prime"></ul>
             </div>`);
+        }
+        if(!('$div_lavorazione').length > 0) {
+            $('#parameters').append(`
+            <div id="div_lavorazione">
+            <form id="form_lavorazioni">
+                <p> Aggiungi le lavorazioni del prodotto </p>
+                <div class="form-group">
+                    <label for="nome_lavorazioni">Nome</label>
+                    <input type="text" class="form-control" id="nome_lavorazioni" placeholder="">
+                </div>
+                <input type="submit" value="Aggiungi">
+            </form>
+            <ul id="lista_lavorazioni"></ul>
+            </div>`);
+        }
     }
     else if(table == 'materia_prima') {
         $('#form').html(`<div class="form-group">
@@ -259,6 +299,7 @@ function changeForm() {
                 <input type="text" class="form-control" id="componente" placeholder="farine di cereali">
             </div>`);
     }
+    $('#form').append(`<input type="submit" value="Inserisci elemento"></input>`)
 }
 
 $(document).on('change','#tipologia', () =>{
@@ -268,7 +309,6 @@ $(document).on('change','#tipologia', () =>{
 $(document).on('submit','#form_mangimi',  (event) =>{
     event.preventDefault();
     mangimi.push({mangime: $('#mangime').val(), quantita: $('#quantita').val()});
-    console.log(mangimi)
     $("#lista_mangimi").html("");
     mangimi.forEach( (item) => {
         $("#lista_mangimi").append(`<li> ${item.mangime} ${item.quantita}</li>`)
@@ -294,4 +334,24 @@ $(document).on('submit','#form_pesticidi', (event) =>{
         $("#lista_pesticidi").append(`<li> ${item.pesticida} ${item.quantita}</li>`)
     })
     $('#form_pesticidi')[0].reset();
+});
+
+$(document).on('submit','#form_materie_prime', (event) =>{
+    event.preventDefault();
+    materie_prime.push({nome_materia_prima: $('#nome_materia_prima').val(), luogo_materia_prima: $('#luogo_materia_prima').val()});
+    $("#lista_materie_prime").html("");
+    materie_prime.forEach( (item) => {
+        $("#lista_materie_prime").append(`<li> ${item.nome_materia_prima} ${item.luogo_materia_prima}</li>`)
+    })
+    $('#form_materie_prime')[0].reset();
+});
+
+$(document).on('submit','#form_lavorazione', (event) =>{
+    event.preventDefault();
+    lavorazioni.push({nome: $('#nome_lavorazione').val()});
+    $("#lista_lavorazioni").html("");
+    lavorazioni.forEach( (item) => {
+        $("#lista_lavorazioni").append(`<li> ${item.nome_lavorazione}</li>`)
+    })
+    $('#form_lavorazioni')[0].reset();
 });

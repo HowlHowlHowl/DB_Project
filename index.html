@@ -16,7 +16,7 @@
 </head>
 
 	<body style="background-color: black; color: white; height:100%">
-		<div id="commands" style="width:50%; float: left; border-right: 1px solid rgba(255, 255, 255, 0.4); padding: 2rem">
+		<div id="commands" style="width:50%; min-height: 100%; float: left; border-right: 1px solid rgba(255, 255, 255, 0.4); padding: 2rem">
 			<div style=" padding-bottom: 2rem;">
 			<label for="tables">Seleziona tabella</label>
 			<select id="tables" onchange="changeForm()">
@@ -38,7 +38,7 @@
 			</div>
 			<div id="parameters">
 				<p>Campi di inserimento</p>
-				<form id="form">
+				<form id="form" onsubmit="insertElement()">
 					<div class="form-group">
 					  <label for="partita_iva">P.I.</label>
 					  <input type="text" class="form-control" id="partita_iva" placeholder="11111111111">
@@ -51,6 +51,7 @@
 						<label for="ragione_sociale">Ragione sociale</label>
 						<input type="text" class="form-control" id="ragione_sociale" placeholder="Bianchi & Rossi S.a.s.">
 					</div>
+					<input type="submit" value="Inserisci elemento">
 				</form>
 			</div>
 		</div>
