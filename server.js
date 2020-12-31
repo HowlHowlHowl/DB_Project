@@ -21,6 +21,34 @@ app.get('/', (req,res) =>{
 	res.status(200).sendFile(path.join(__dirname,'index.html'));
 })
 
+
+//route to insert data into tables
+app.post('/insertData', (req,res) =>{
+	let dati = JSON.parse(req.body.content);
+	
+	dati.forEach(el => {
+		switch(el.table){
+			//same attributes for these 3 cases
+			case 'produttore':
+			case 'fornitore':
+			case 'azienda_trasporti': ins_azienda(el); break;
+			case 'prodotto': ins_prod(el); break;
+			case 'materia_prima': ins_matprima(el);	break;
+			case 'package': ins_package(el); break;
+			case 'procedura_lavorazione': ins_proc_lav(el); break;
+			//same attributes for these 2 cases
+			case 'fertilizzante':
+			case 'pesticida': ins_fert_pest(el); break;
+			case 'mangime': ins_mangime(el); break;
+			default: res.status(400).end(); console.log("Tabella non esistente");
+		}
+	});
+	res.status(200).end();
+})
+
+/* 
+	FUNCTIONS FOR INSERTIONS  
+*/
 function ins_azienda(az){
 	db.run(`INSERT INTO ${az.table} (partita_iva, nome, ragione_sociale)
 			VALUES(?,?,?)`,[az.partita_iva,az.nome,az.ragione_sociale], (err)=> {
@@ -110,71 +138,47 @@ function ins_matprima(mat){
 	}			
 }
 
-//route to insert data into tables
-app.post('/insertData', (req,res) =>{
-	let dati = JSON.parse(req.body.content);
-	
-	dati.forEach(el => {
-		switch(el.table){
-			//same attributes for these 3 cases
-			case 'produttore':
-			case 'fornitore':
-			case 'azienda_trasporti':
-				ins_azienda(el);
-				break;
-			case 'prodotto':
-				ins_prod(el);
-				break;
-			case 'materia_prima':
-				ins_matprima(el);
-				break;
-			case 'package':
-				db.run(`INSERT INTO ${el.table} (codice, tipo, materiale, volume, peso)
-						VALUES(?,?,?,?,?)`,[el.codice,el.tipo,el.materiale,el.volume,el.peso],(err)=> {
-							if (err) {
-								console.log(err);
-								res.status(500).end();
-							}
-				})
-				break;
-			case 'procedura_lavorazione':
-				db.run(`INSERT INTO ${el.table} (tipo, CO2, qAcqua)
-						VALUES(?,?,?)`,[el.tipo,el.CO2,el.qAcqua], (err)=> {
-							if (err) {
-								console.log(err);
-								res.status(500).end();
-							}
-				})
-				break;
-			//same attributes for these 2 cases
-			case 'fertilizzante':
-			case 'pesticida':
-				db.run(`INSERT INTO ${el.table} (nome, acidificazione, eutrofizzazione)
-						VALUES(?,?,?)`,[el.nome,el.acidificazione,el.eutrofizzazione], (err)=> {
-							if (err) {
-								console.log(err);
-								res.status(500).end();
-							}
-				})
-				break;
-			case 'mangime':
-				db.run(`INSERT INTO ${el.table} (nome, componente) VALUES(?,?)`,[el.nome,el.componente], (err)=> {
-							if (err) {
-								console.log(err);
-								res.status(500).end();
-							}
-				})
-				break;
-			default:
-				res.status(400).end();
-				console.log("Tabella non esistente");
-		}
-	});
-	
-	
-	res.status(200).end();
+function ins_package(pack){
+	db.run(`INSERT INTO ${pack.table} (codice, tipo, materiale, volume, peso)
+			VALUES(?,?,?,?,?)`,[pack.codice,pack.tipo,pack.materiale,pack.volume,pack.peso],(err)=> {
+				if (err) {
+					console.log(err);
+					res.status(500).end();
+				}
+	})
+}
 
-})
+function ins_proc_lav(proc){
+	db.run(`INSERT INTO ${proc.table} (tipo, CO2, qAcqua)
+			VALUES(?,?,?)`,[proc.tipo,proc.CO2,proc.qAcqua], (err)=> {
+				if (err) {
+					console.log(err);
+					res.status(500).end();
+				}
+	})
+}
+
+function ins_fert_pest(obj){
+	db.run(`INSERT INTO ${obj.table} (nome, acidificazione, eutrofizzazione)
+			VALUES(?,?,?)`,[obj.nome,obj.acidificazione,obj.eutrofizzazione], (err)=> {
+				if (err) {
+					console.log(err);
+					res.status(500).end();
+				}
+	})
+}
+
+function ins_mangime(mang){
+	db.run(`INSERT INTO ${mang.table} (nome, componente) VALUES(?,?)`,[mang.nome,mang.componente], (err)=> {
+			if (err) {
+				console.log(err);
+				res.status(500).end();
+			}
+	})
+}
+/* 
+	END FUNCTIONS FOR INSERTIONS  
+*/
 
 
 function return_rows(res, err, rows) {
