@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
+let ins_functions = require('./functions').insert_functions;
+
 //open or create the db file
 let db = new sqlite3.Database(path.join(__dirname,'db/database.db'),(err) => {
 	if (err) {
@@ -31,154 +33,21 @@ app.post('/insertData', (req,res) =>{
 			//same attributes for these 3 cases
 			case 'produttore':
 			case 'fornitore':
-			case 'azienda_trasporti': ins_azienda(el); break;
-			case 'prodotto': ins_prod(el); break;
-			case 'materia_prima': ins_matprima(el);	break;
-			case 'package': ins_package(el); break;
-			case 'procedura_lavorazione': ins_proc_lav(el); break;
+			case 'azienda_trasporti': ins_functions.ins_azienda(el,db,res); break;
+			case 'prodotto': ins_functions.ins_prod(el,db,res); break;
+			case 'materia_prima': ins_functions.ins_matprima(el,db,res); break;
+			case 'package': ins_functions.ins_package(el,db,res); break;
+			case 'procedura_lavorazione': ins_functions.ins_proc_lav(el,db,res); break;
 			//same attributes for these 2 cases
 			case 'fertilizzante':
-			case 'pesticida': ins_fert_pest(el); break;
-			case 'mangime': ins_mangime(el); break;
+			case 'pesticida': ins_functions.ins_fert_pest(el,db,res); break;
+			case 'mangime': ins_functions.ins_mangime(el,db,res); break;
 			default: res.status(400).end(); console.log("Tabella non esistente");
 		}
 	});
 	res.status(200).end();
 })
 
-/* 
-	FUNCTIONS FOR INSERTIONS  
-*/
-function ins_azienda(az){
-	db.run(`INSERT INTO ${az.table} (partita_iva, nome, ragione_sociale)
-			VALUES(?,?,?)`,[az.partita_iva,az.nome,az.ragione_sociale], (err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-	})
-}
-
-function ins_prod(prod){
-	//to avoid parallel execution
-	db.serialize(()=>{
-		db.run(`INSERT INTO ${prod.table} (EAN, nome, valore_di_impatto, peso, data, azienda_trasporti, tipo_trasporto, CO2, package, produttore)
-			VALUES(?,?,?,?,?,?,?,?,?,?)`,[prod.EAN,prod.nome,prod.valore_di_impatto,prod.peso,prod.data,prod.azienda_trasporti,prod.tipo_trasporto,
-				prod.CO2,prod.package,prod.produttore],(err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-		})
-		db.run(`INSERT INTO composizione (nome_materia_prima, luogo_materia_prima, prodotto, quantita)
-				VALUES(?,?,?,?)`,[prod.nome_materia_prima,prod.luogo_materia_prima,prod.EAN,prod.quantita],(err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-		})
-		db.run(`INSERT INTO lavorazione (prodotto, procedura_lavorazione)
-				VALUES(?,?)`,[prod.EAN,prod.procedura_lavorazione],(err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-		})
-	})
-}
-
-function ins_matprima(mat){
-	db.run(`INSERT INTO ${mat.table} (nome, luogo, tipologia, qTerra, qAcqua, CO2, fornitore)
-			VALUES(?,?,?,?,?,?,?)`,[mat.nome,mat.luogo,mat.tipologia,mat.qTerra,mat.qAcqua,mat.CO2,mat.fornitore],
-			(err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-	})
-	//if exists some relationships with 'fertilizzante' and 'pesticida'
-	if(mat.tipologia === 'vegetale'){
-		db.serialize(()=>{
-			if(mat.fertilizzanti.length != 0){
-				mat.fertilizzanti.forEach(fert => {
-					db.run(`INSERT INTO utilizzo_fertilizzante (nome_materia_prima, luogo_materia_prima, fertilizzante, quantita)
-						VALUES(?,?,?,?)`,[mat.nome,mat.luogo,fert.nome,fert.quantita],(err)=> {
-						if (err) {
-							console.log(err);
-							res.status(500).end();
-						}
-					})
-				});
-			}
-			if(mat.pesticidi.length != 0){
-				mat.pesticidi.forEach(pest => {
-					db.run(`INSERT INTO utilizzo_pesticida (nome_materia_prima, luogo_materia_prima, pesticida, quantita)
-						VALUES(?,?,?,?)`,[mat.nome,mat.luogo,pest.nome,pest.quantita],(err)=> {
-						if (err) {
-							console.log(err);
-							res.status(500).end();
-						}
-					})
-				});
-			}
-		})
-	}
-	else{
-		if(mat.mangimi.length != 0){
-			mat.mangimi.forEach(mang => {
-				db.run(`INSERT INTO alimentazione (nome_materia_prima, luogo_materia_prima, mangime, quantita)
-					VALUES(?,?,?,?)`,[mat.nome,mat.luogo,mang.nome,mang.quantita],(err)=> {
-					if (err) {
-						console.log(err);
-						res.status(500).end();
-					}
-				})
-			});
-		}
-	}			
-}
-
-function ins_package(pack){
-	db.run(`INSERT INTO ${pack.table} (codice, tipo, materiale, volume, peso)
-			VALUES(?,?,?,?,?)`,[pack.codice,pack.tipo,pack.materiale,pack.volume,pack.peso],(err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-	})
-}
-
-function ins_proc_lav(proc){
-	db.run(`INSERT INTO ${proc.table} (tipo, CO2, qAcqua)
-			VALUES(?,?,?)`,[proc.tipo,proc.CO2,proc.qAcqua], (err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-	})
-}
-
-function ins_fert_pest(obj){
-	db.run(`INSERT INTO ${obj.table} (nome, acidificazione, eutrofizzazione)
-			VALUES(?,?,?)`,[obj.nome,obj.acidificazione,obj.eutrofizzazione], (err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-	})
-}
-
-function ins_mangime(mang){
-	db.run(`INSERT INTO ${mang.table} (nome, componente) VALUES(?,?)`,[mang.nome,mang.componente], (err)=> {
-			if (err) {
-				console.log(err);
-				res.status(500).end();
-			}
-	})
-}
-/* 
-	END FUNCTIONS FOR INSERTIONS  
-*/
 
 
 function return_rows(res, err, rows) {
