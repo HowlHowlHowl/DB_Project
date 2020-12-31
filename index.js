@@ -2,23 +2,24 @@ var fertilizzanti = [];
 var pesticidi = [];
 var mangimi = [];
 
+var new_tuple = {};
+
 /* form management functions */
 
-function getTable(selection) {
-    let index = selection.value;
+function getTable() {
+    let index = $('#tables').val();
     $.ajax({
         url: '/table/' + index,
         data: JSON.stringify(form),
         success: (data) => {
-            displayTable(data, index);
+            displayTable(data);
         },
         error: (e) => {
 
         }
     });
 }
-function displayTable() {
-    let table = $('#tables').val();
+function displayTable(table) {
     let db_table = document.createElement('table');
     let thead = document.createElement('thead');
     db_table.appendChild(
@@ -36,7 +37,7 @@ function displayTable() {
     });
     db_table.appendChild(tbody);
 }
-function getHeader() {
+function getHeader(table) { 
     let header = '';
     Object.keys(table[0]).forEach((key) => {
         header += '<th>' + key + '</th>';
@@ -51,7 +52,8 @@ function changeTypeMP() {
         pesticidi = []; fertilizzanti = [];
         $('#div_fertilizzanti').remove();
         $('#div_pesticidi').remove();
-        $('#parameters').append(`
+        if(!$('div_mangimi').length > 0){
+            $('#parameters').append(`
             <div id="div_mangimi">
             <form id="form_mangimi">
                 <p> Aggiungi i mangimi utilizzati per la materia prima inserita </p>
@@ -67,11 +69,13 @@ function changeTypeMP() {
             </form>
             <ul id="lista_mangimi"></ul>
             </div>`);
+        }
     }
     if(type_mp == 'vegetale') {
         mangimi = [];
         $('#div_mangimi').remove();
-        $('#parameters').append(`
+        if(!$('div_fertilizzati').length > 0){
+            $('#parameters').append(`
             <div id="div_fertilizzanti">
             <form id="form_fertilizzanti">
                 <p> Aggiungi i fertilizzanti utilizzati per la materia prima inserita </p>
@@ -87,7 +91,7 @@ function changeTypeMP() {
             </form>
             <ul id="lista_fertilizzanti"></ul>
             </div>`);
-        $('#parameters').append(`
+            $('#parameters').append(`
             <div id="div_pesticidi">
             <form id="form_pesticidi">
                 <p> Aggiungi i pesticidi utilizzati per la materia prima inserita </p>
@@ -103,6 +107,7 @@ function changeTypeMP() {
             </form>
             <ul id="lista_pesticidi"></ul>
             </div>`);
+        }
     }
 }
 function changeForm() {
@@ -259,8 +264,37 @@ function changeForm() {
                 <input type="text" class="form-control" id="componente" placeholder="farine di cereali">
             </div>`);
     }
+    $('#form').append('<input type="submit" value="Inserisci elemento">');
 }
-
+function insertElement() {
+    let table = $('#tables').val();
+    switch (table) {
+        case "materia_prima":
+            insertRaw();
+            break;
+        case "prodotto":
+            insertProduct();
+            break;
+        default:
+            insert();
+            break;
+    }
+}
+function insert() {
+    $('body inpyut[type="text"]').each((input) => {
+        new_tuple[input.id]=input.val();
+    });
+}
+function insertRaw() {
+    let type_mp = $('#tipologia').val();
+    if(type_mp=="vegetale") {
+        new_tuple['mangime'] = mangimi; 
+    } else {
+        new_tuple['fertilizzanti'] = fertilizzanti;
+        new_tuple['pesticidi'] = pesticidi;
+    }
+    insert();
+}
 $(document).on('change','#tipologia', () =>{
     this.changeTypeMP();
 });
@@ -268,7 +302,6 @@ $(document).on('change','#tipologia', () =>{
 $(document).on('submit','#form_mangimi',  (event) =>{
     event.preventDefault();
     mangimi.push({mangime: $('#mangime').val(), quantita: $('#quantita').val()});
-    console.log(mangimi)
     $("#lista_mangimi").html("");
     mangimi.forEach( (item) => {
         $("#lista_mangimi").append(`<li> ${item.mangime} ${item.quantita}</li>`)
