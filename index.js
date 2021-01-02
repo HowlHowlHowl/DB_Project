@@ -179,6 +179,14 @@ function changeForm() {
                     <input type="text" class="form-control" id="tipo_trasporto" placeholder="">
                 </div>
                 <div class="form-group">
+                    <label for="CO2_trasporto">Quantità di CO2 emessa per toonellata-km (g/tkm)</label>
+                    <input type="text" class="form-control" id="CO2_trasporto" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="tratta_trasporto">Tratta media del trasporto (km)</label>
+                    <input type="text" class="form-control" id="tratta_trasporto" placeholder="">
+                </div>
+                <div class="form-group">
                     <label for="package">Package</label>
                     <input type="text" class="form-control" id="package" placeholder="">
                 </div>
@@ -186,7 +194,7 @@ function changeForm() {
                     <label for="produttore">Azienda produttrice</label>
                     <input type="text" class="form-control" id="produttore" placeholder="">
                 </div>
-                `);
+            `);
     
             $('#parameters').append(`
             <div id="div_materie_prime" style="background-color: #2b3d4a;padding: 2rem;">
