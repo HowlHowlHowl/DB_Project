@@ -13,6 +13,26 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 	<script type="text/javascript" src="/index.js"></script>
+	<style>
+		table {
+		  font-family: Arial, Helvetica, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+		
+		td, th {
+		  border: 1px solid rgb(205 149 28 / 40%);
+		  padding: 8px;
+		}
+						
+		th {
+		  padding-top: 12px;
+		  padding-bottom: 12px;
+		  text-align: left;
+		  background-color: #134b5b;
+		  color: white;
+		}
+	</style>
 </head>
 
 	<body style="background-color: black; color: white; height:100%">
@@ -32,31 +52,21 @@
 				<option value="pesticida">Pesticida</option>
 				<option value="mangime">Mangime</option>
 				<!-- visualizzazione tabelle nelle quali non si possono fare inserimenti? -->
+				<option value="composizione">Composizioni</option>
+				<option value="utilizzo_fertilizzante">Fertilizzanti utilizzati</option>
 			</select>
 			<button onclick="getTable()">
 				Visualizza tabella
 			</button>
 			</div>
 			<div id="parameters">
-				<form id="form" onsubmit="insertElement()">
-				<!--	<input type="submit" value="Inserisci elemento">
-					<div class="form-group">
-					  <label for="partita_iva">P.I.</label>
-					  <input type="text" class="form-control" id="partita_iva" placeholder="11111111111">
-					</div>
-					<div class="form-group">
-						<label for="nome">Nome</label>
-						<input type="text" class="form-control" id="nome" placeholder="">
-					</div>
-					<div class="form-group">
-						<label for="ragione_sociale">Ragione sociale</label>
-						<input type="text" class="form-control" id="ragione_sociale" placeholder="Bianchi & Rossi S.a.s.">
-					</div> -->
-				</form>
+				<p>Campi di inserimento</p><input id="insertBtn" type="submit" value="Inserisci elemento" onclick="insertElement(event)">
+				<form id="form" action=""></form>
 			</div>
 		</div>
-		<div id="display" style="width:50%; height: 100%; float:right; padding: 2rem">
+		<div style="width:50%; height: 100%; float:right; padding: 2rem">
 			<p>Visualizzazione</p>
+			<div id="display"></div>
 		</div>
 
 	</body>

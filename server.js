@@ -29,25 +29,25 @@ app.get('/index.js', (req,res) =>{
 
 //route to insert data into tables
 app.post('/insertData', (req,res) =>{
-	let dati = JSON.parse(req.body.content);
+	let el = req.body.content;
+	console.log(el)
 	
-	dati.forEach(el => {
-		switch(el.table){
-			//same attributes for these 3 cases
-			case 'produttore':
-			case 'fornitore':
-			case 'azienda_trasporti': ins_functions.ins_azienda(el,db,res); break;
-			case 'prodotto': ins_functions.ins_prod(el,db,res); break;
-			case 'materia_prima': ins_functions.ins_matprima(el,db,res); break;
-			case 'package': ins_functions.ins_package(el,db,res); break;
-			case 'procedura_lavorazione': ins_functions.ins_proc_lav(el,db,res); break;
-			//same attributes for these 2 cases
-			case 'fertilizzante':
-			case 'pesticida': ins_functions.ins_fert_pest(el,db,res); break;
-			case 'mangime': ins_functions.ins_mangime(el,db,res); break;
-			default: res.status(400).end(); console.log("Tabella non esistente");
-		}
-	});
+	switch(el.table){
+		//same attributes for these 3 cases
+		case 'produttore':
+		case 'fornitore':
+		case 'azienda_trasporti': ins_functions.ins_azienda(el,db,res); break;
+		case 'prodotto': ins_functions.ins_prod(el,db,res); break;
+		case 'materia_prima': ins_functions.ins_matprima(el,db,res); break;
+		case 'package': ins_functions.ins_package(el,db,res); break;
+		case 'procedura_lavorazione': ins_functions.ins_proc_lav(el,db,res); break;
+		//same attributes for these 2 cases
+		case 'fertilizzante':
+		case 'pesticida': ins_functions.ins_fert_pest(el,db,res); break;
+		case 'mangime': ins_functions.ins_mangime(el,db,res); break;
+		default: res.status(400).end(); console.log("Tabella non esistente");
+	}
+	
 	res.status(200).end();
 })
 
@@ -64,6 +64,7 @@ function return_rows(res, err, rows) {
 
 app.get('/table/:name', (req,res) => {
 	let table = req.params.name.replace(/\W/g, '');
+	console.log(table)
 	db.all(`select * from ${table}`,
 		(err, rows) => return_rows(res, err, rows))
 });

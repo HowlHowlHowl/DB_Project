@@ -5,6 +5,7 @@ var materie_prime = [];
 var lavorazioni = [];
 
 var new_tuple = {};
+var obj = {content: {}};
 
 /* form management functions */
 
@@ -14,38 +15,37 @@ function getTable() {
         url: '/table/' + index,
         data: JSON.stringify(form),
         success: (data) => {
-            displayTable(data);
+            if(data.length > 0) displayTable(data);
+            else $('#display').html(`<p>Nessun dato da visualizzare</p>`)
         },
         error: (e) => {
 
         }
     });
 }
-function displayTable(table) {
+function displayTable(data) {
     let db_table = document.createElement('table');
-    let thead = document.createElement('thead');
-    db_table.appendChild(
-        thead.innerHTML(
-            getHeader(table)
-        )
-    );
-    let tbody = document.createElement('tbody');
-    table.forEach((element) => {
-        let tr = document.createElement(tr);
-        Object.keys(element).forEach((key) => {
-            tr.innerHTML(tr.innerHTML() + '<td>' + element[key] + '</td>');	
-        });
-        tbody.appendChild(tr);
-    });
-    db_table.appendChild(tbody);
-}
-function getHeader(table) { 
     let header = '';
-    Object.keys(table[0]).forEach((key) => {
+    Object.keys(data[0]).forEach((key) => {
         header += '<th>' + key + '</th>';
     });
     let tr = document.createElement('tr');
-    return tr.innerHTML(header);
+    tr.innerHTML = header;
+    let thead = document.createElement('thead');
+    thead.appendChild(tr);
+    db_table.appendChild(thead)
+    let tbody = document.createElement('tbody');
+    data.forEach((element) => {
+        let tr = document.createElement('tr');
+        let row = '';
+        Object.keys(element).forEach((key) => {
+            row += '<td>' + element[key] + '</td>';
+        });
+        tr.innerHTML = row;
+        tbody.appendChild(tr);
+    });
+    db_table.appendChild(tbody);
+    $('#display').html(db_table)
 }
 
 
@@ -119,6 +119,7 @@ function changeTypeMP() {
         }
     }
 }
+
 function changeForm() {
     let table = $('#tables').val();
 
@@ -139,21 +140,21 @@ function changeForm() {
         if(table =='produttore' || table =='fornitore' || table=='azienda_trasporti') {
             $('#form').html(`<div class="form-group">
                 <label for="partita_iva">P.I.</label>
-                <input type="text" class="form-control" id="partita_iva" placeholder="11111111111">
+                <input type="text" class="form-control" id="partita_iva" name="partita_iva" placeholder="11111111111">
                 </div>
                 <div class="form-group">
                     <label for="nome">Nome</label>
-                    <input type="text" class="form-control" id="nome" placeholder="">
+                    <input type="text" class="form-control" id="nome" name="nome" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="ragione_sociale">Ragione sociale</label>
-                    <input type="text" class="form-control" id="ragione_sociale" placeholder="Bianchi & Rossi S.a.s.">
+                    <input type="text" class="form-control" id="ragione_sociale" name="ragione_sociale" placeholder="Bianchi & Rossi S.a.s.">
                 </div>`);
         }
         else if(table == 'prodotto') {
             $('#form').html(`<div class="form-group">
                 <label for="EAN">Codice EAN</label>
-                <input type="text" class="form-control" id="ean" placeholder="1111111111111">
+                <input type="text" class="form-control" id="EAN" placeholder="1111111111111">
                 </div>
                 <div class="form-group">
                     <label for="nome">Nome</label>
@@ -181,7 +182,7 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="produttore">Azienda produttrice</label>
-                    <input type="text" class="form-control" id="azienda_produttrice" placeholder="">
+                    <input type="text" class="form-control" id="produttore" placeholder="">
                 </div>
                 `);
     
@@ -205,11 +206,11 @@ function changeForm() {
     
             $('#parameters').append(`
             <div id="div_lavorazione">
-            <form id="form_lavorazioni">
+            <form id="form_lavorazione">
                 <p> Aggiungi le lavorazioni del prodotto </p>
                 <div class="form-group">
-                    <label for="nome_lavorazioni">Nome</label>
-                    <input type="text" class="form-control" id="nome_lavorazioni" placeholder="">
+                    <label for="nome_lavorazione">Nome</label>
+                    <input type="text" class="form-control" id="nome_lavorazione" placeholder="">
                 </div>
                 <input type="submit" value="Aggiungi">
             </form>
@@ -225,7 +226,7 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="luogo">Luogo</label>
-                    <input type="text" class="form-control" id="peso" placeholder="">
+                    <input type="text" class="form-control" id="luogo" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="tipologia">Tipologia</label>
@@ -236,16 +237,16 @@ function changeForm() {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="q_terra">Superficie di terreno utilizzata</label>
-                    <input type="text" class="form-control" id="q_terra" placeholder="">
+                    <label for="qTerra">Superficie di terreno utilizzata</label>
+                    <input type="text" class="form-control" id="qTerra" placeholder="">
                 </div>
                 <div class="form-group">
-                    <label for="q_acqua">Quantità di acqua</label>
-                    <input type="text" class="form-control" id="q_acqua" placeholder="">
+                    <label for="qAcqua">Quantità di acqua</label>
+                    <input type="text" class="form-control" id="qAcqua" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="CO2">Quantità di gas serra prodotta (CO2 eq.)</label>
-                    <input type="text" class="form-control" id="CO2 placeholder="">
+                    <input type="text" class="form-control" id="CO2" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="fornitore">Fornitore</label>
@@ -284,8 +285,8 @@ function changeForm() {
                     <input type="text" class="form-control" id="CO2" placeholder="">
                 </div>
                 <div class="form-group">
-                    <label for="q_acqua">Quantità di acqua</label>
-                    <input type="text" class="form-control" id="q_acqua" placeholder="">
+                    <label for="qAcqua">Quantità di acqua</label>
+                    <input type="text" class="form-control" id="qAcqua" placeholder="">
                 </div>`);
         }
         else if(table == 'fertilizzante' || table == 'pesticida') {
@@ -295,7 +296,7 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="acidificazione">Valore di acidificazione</label>
-                    <input type="text" class="form-control" id="CO2" placeholder="">
+                    <input type="text" class="form-control" id="acidificazione" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="eutrofizzazione">Valore di eutrofizzazione</label>
@@ -312,29 +313,19 @@ function changeForm() {
                     <input type="text" class="form-control" id="componente" placeholder="farine di cereali">
                 </div>`);
         }
-        $('#form').prepend('<p>Campi di inserimento</p><input type="submit" value="Inserisci elemento">');
     }
    
 }
-function insertElement() {
-    let table = $('#tables').val();
-    switch (table) {
-        case "materia_prima":
-            insertRaw();
-            break;
-        case "prodotto":
-            insertProduct();
-            break;
-        default:
-            insert();
-            break;
-    }
-}
+
+/* code for insertions */
+
+/*
 function insert() {
-    $('body inpyut[type="text"]').each((input) => {
+    $('body input[type="text"]').each((input) => {
         new_tuple[input.id]=input.val();
     });
 }
+
 function insertRaw() {
     let type_mp = $('#tipologia').val();
     if(type_mp=="vegetale") {
@@ -345,6 +336,103 @@ function insertRaw() {
     }
     insert();
 }
+*/
+
+function insert(table) {
+    obj.content['table'] = table;
+    $('#form input[type="text"]').each((index, elem) => {
+        obj.content[elem.id] = elem.value;
+    });
+    
+    $.ajax({
+        type: "POST",
+        url: "/insertData",
+        data: obj,
+        cache: false,
+        success: (data) =>{
+            console.log('ok')
+        },
+        error: function (e) {
+            console.log("error",e);
+        }
+    });
+}
+
+function insertProduct(table) {
+    obj.content['table'] = table;
+    $('#form input[type="text"]').each((index, elem) => {
+        obj.content[elem.id] = elem.value;
+    });
+
+    obj.content['materie_prime'] = materie_prime;
+    obj.content['lavorazioni'] = lavorazioni;
+    console.log(obj)
+    
+    $.ajax({
+        type: "POST",
+        url: "/insertData",
+        data: obj,
+        cache: false,
+        success: (data) =>{
+            console.log('ok')
+        },
+        error: function (e) {
+            console.log("error",e);
+        }
+    });
+}
+
+function insertRaw(table) {
+    obj.content['table'] = table;
+    $('#form input[type="text"]').each((index, elem) => {
+        obj.content[elem.id] = elem.value;
+    });
+
+    obj.content['tipologia'] = $('#tipologia').val();
+
+    if(obj.content['tipologia'] == 'animale')
+        obj.content['mangimi'] = mangimi;
+    else {
+        obj.content['fertilizzanti'] = fertilizzanti;
+        obj.content['pesticidi'] = pesticidi;
+    }
+    
+    console.log(obj)
+    
+    $.ajax({
+        type: "POST",
+        url: "/insertData",
+        data: obj,
+        cache: false,
+        success: (data) =>{
+            console.log('ok')
+        },
+        error: function (e) {
+            console.log("error",e);
+        }
+    });
+}
+
+function insertElement(event) {
+    event.preventDefault();
+    let table = $('#tables').val();
+    switch (table) {
+        case "prodotto":
+            insertProduct(table);
+            break;
+        case "materia_prima":
+            insertRaw(table);
+            break;
+        default:
+            insert(table);
+            break;
+    }
+    $('#form')[0].reset();
+}
+
+
+/**** */
+
 $(document).on('change','#tipologia', () =>{
     this.changeTypeMP();
 });
@@ -391,10 +479,10 @@ $(document).on('submit','#form_materie_prime', (event) =>{
 
 $(document).on('submit','#form_lavorazione', (event) =>{
     event.preventDefault();
-    lavorazioni.push({nome: $('#nome_lavorazione').val()});
+    lavorazioni.push({procedura_lavorazione: $('#nome_lavorazione').val()});
     $("#lista_lavorazioni").html("");
     lavorazioni.forEach( (item) => {
-        $("#lista_lavorazioni").append(`<li> ${item.nome_lavorazione}</li>`)
+        $("#lista_lavorazioni").append(`<li> ${item.procedura_lavorazione}</li>`)
     })
-    $('#form_lavorazioni')[0].reset();
+    $('#form_lavorazione')[0].reset();
 });
