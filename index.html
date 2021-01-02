@@ -35,22 +35,22 @@
 	</style>
 </head>
 
-	<body style="background-color: black; color: white; height:100%">
+	<body style="background-color: #0d0d0d; color: white; height:100%">
 		<div id="commands" style="width:50%; min-height: 100%; float: left; border-right: 1px solid rgba(255, 255, 255, 0.4); padding: 2rem">
 			<div style=" padding-bottom: 2rem;">
 				<label for="tables">Seleziona tabella</label>
 				<select id="tables" onchange="changeForm()">
-					<option value="-">-</option>
-					<option value="produttore">Produttore</option>
-					<option value="fornitore">Fornitore</option>
-					<option value="azienda_trasporti">Azienda di Trasporti</option>
-					<option value="prodotto">Prodotto</option>
-					<option value="package">Package</option>
-					<option value="procedura_lavorazione">Procedura di Lavorazione</option>
-					<option value="materia_prima">Materia Prima</option>
-					<option value="fertilizzante">Fertilizzante</option>
-					<option value="pesticida">Pesticida</option>
-					<option value="mangime">Mangime</option>
+					<option value="-">---</option>
+						<option value="produttore">Produttore</option>
+						<option value="fornitore">Fornitore</option>
+						<option value="azienda_trasporti">Azienda di Trasporti</option>
+						<option value="prodotto">Prodotto</option>
+						<option value="package">Package</option>
+						<option value="procedura_lavorazione">Procedura di Lavorazione</option>
+						<option value="materia_prima">Materia Prima</option>
+						<option value="fertilizzante">Fertilizzante</option>
+						<option value="pesticida">Pesticida</option>
+						<option value="mangime">Mangime</option>
 				</select>
 			</div>
 			<div id="parameters">
@@ -62,21 +62,31 @@
 			</div>
 		</div>
 		<div style="width:50%; height: 100%; float:right; padding: 2rem">
-			<label for="seLTable">Visualizza tabella</label>
+			<label for="selTable">Visualizza tabella</label>
 			<select id="selTable" onchange="getTable()">
-				<option value="-">-</option>
-				<option value="produttore">Produttore</option>
-				<option value="fornitore">Fornitore</option>
-				<option value="azienda_trasporti">Azienda di Trasporti</option>
-				<option value="prodotto">Prodotto</option>
-				<option value="package">Package</option>
-				<option value="procedura_lavorazione">Procedura di Lavorazione</option>
-				<option value="materia_prima">Materia Prima</option>
-				<option value="fertilizzante">Fertilizzante</option>
-				<option value="pesticida">Pesticida</option>
-				<option value="mangime">Mangime</option>
-				<option value="composizione">Composizioni</option>
-				<option value="utilizzo_fertilizzante">Fertilizzanti utilizzati</option>
+				<option value="-">---</option>
+				<optgroup label="Tabelle">
+					<option value="produttore">Produttore</option>
+					<option value="fornitore">Fornitore</option>
+					<option value="azienda_trasporti">Azienda di Trasporti</option>
+					<option value="prodotto">Prodotto</option>
+					<option value="package">Package</option>
+					<option value="procedura_lavorazione">Procedura di Lavorazione</option>
+					<option value="materia_prima">Materia Prima</option>
+					<option value="fertilizzante">Fertilizzante</option>
+					<option value="pesticida">Pesticida</option>
+					<option value="mangime">Mangime</option>
+					<option value="composizione">Composizioni</option>
+					<option value="utilizzo_fertilizzante">Fertilizzanti utilizzati</option>
+				</optgroup>
+				<optgroup label="Visualizza">
+					<option value="9">CO2 e acqua prodotti</option>
+					<option value="10">Impatto per prodotto</option>
+					<option value="11">Prodotti inseriti nell'ultimo anno</option>
+					<option value="12">Acidificazione/Eutrofizzazione per Vegetali</option>
+					<option value="13">Acidificazione/Eutrofizzazione per Animali</option>
+					<option value="14">Dati sui trasporti di ogni prodotto</option>
+				</optgroup>
 			</select>
 			<div id="display"></div>
 		</div>

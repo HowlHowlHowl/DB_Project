@@ -69,7 +69,7 @@ app.get('/table/:name', (req,res) => {
 });
 
 app.get('/query/:number', (req, res) => {
-	switch(number) {
+	switch(req.params.number) {
 		case  9: query9 (res); break;
 		case 10: query10(res); break;
 		case 11: query11(res); break;

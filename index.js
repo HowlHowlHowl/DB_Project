@@ -10,8 +10,14 @@ var obj = {content: {}};
 
 function getTable() {
     let index = $('#selTable').val();
+    let url = "";
+    if (isNaN(index)) {
+        url = '/table/' + index;
+    } else {
+        url = '/query/' + index;
+    }
     $.ajax({
-        url: '/table/' + index,
+        url: url,
         data: JSON.stringify(form),
         success: (data) => {
             if(data.length > 0) displayTable(data);
