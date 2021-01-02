@@ -65,7 +65,7 @@
 			<label for="selTable">Visualizza tabella</label>
 			<select id="selTable" onchange="getTable()">
 				<option value="-">---</option>
-				<optgroup label="Tabelle">
+				<optgroup route="table" label="Tabelle">
 					<option value="produttore">Produttore</option>
 					<option value="fornitore">Fornitore</option>
 					<option value="azienda_trasporti">Azienda di Trasporti</option>
@@ -80,7 +80,7 @@
 					<option value="utilizzo">Sostanza utilizzata</option>
 					<option value="alimentazione">Alimentazione</option>
 				</optgroup>
-				<optgroup label="Visualizza">
+				<optgroup route="query" label="Visualizza">
 					<option value="9">CO2 e acqua prodotti</option>
 					<option value="10">Impatto per prodotto</option>
 					<option value="11">Prodotti inseriti nell'ultimo anno</option>

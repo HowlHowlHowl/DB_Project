@@ -27,24 +27,30 @@ function ins_prod(prod,db,res){
 					res.status(500).end();
 				}
 		})
-		prod.materie_prime.forEach( (materia) => {
-			db.run(`INSERT INTO composizione (nome_materia_prima, luogo_materia_prima, prodotto, quantita)
-				VALUES(?,?,?,?)`,[materia.nome_materia_prima,materia.luogo_materia_prima,prod.EAN,prod.quantita],(err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-			})
-		})
-		prod.lavorazioni.forEach( (materia) => {
-			db.run(`INSERT INTO lavorazione (prodotto, procedura_lavorazione)
-					VALUES(?,?)`,[prod.EAN,prod.procedura_lavorazione],(err)=> {
+		if(prod.materie_prime) {
+			prod.materie_prime.forEach( (materia) => {
+				db.run(`INSERT INTO composizione (nome_materia_prima, luogo_materia_prima, prodotto, quantita)
+					VALUES(?,?,?,?)`,[materia.nome_materia_prima,materia.luogo_materia_prima,prod.EAN,prod.quantita],(err)=> {
 					if (err) {
 						console.log(err);
 						res.status(500).end();
 					}
-			}) 
-		})
+				})
+			})
+		}
+
+		if(prod.lavorazioni) {
+			console.log(prod.lavorazioni);
+			prod.lavorazioni.forEach( (lav) => {
+				db.run(`INSERT INTO lavorazione (prodotto, procedura_lavorazione)
+						VALUES(?,?)`,[prod.EAN, lav.procedura_lavorazione],(err)=> {
+						if (err) {
+							console.log(err);
+							res.status(500).end();
+						}
+				}) 
+			})
+		}
 	})
 }
 
@@ -73,7 +79,7 @@ function ins_matprima(mat,db,res){
 			if(mat.fertilizzanti){
 				mat.fertilizzanti.forEach(fert => {
 					db.run(`INSERT INTO utilizzo (nome_materia_prima, luogo_materia_prima, sostanza, quantita)
-						VALUES(?,'fertilizzante',?,?)`,[mat.nome,mat.luogo,fert.nome,fert.quantita],(err)=> {
+						VALUES(?,?,?,?)`,[mat.nome,mat.luogo,fert.nome,fert.quantita],(err)=> {
 						if (err) {
 							console.log(err);
 							res.status(500).end();
@@ -84,7 +90,7 @@ function ins_matprima(mat,db,res){
 			if(mat.pesticidi){
 				mat.pesticidi.forEach(pest => {
 					db.run(`INSERT INTO utilizzo (nome_materia_prima, luogo_materia_prima, sostanza, quantita)
-						VALUES(?,'pesticida',?,?)`,[mat.nome,mat.luogo,pest.nome,pest.quantita],(err)=> {
+						VALUES(?,?,?,?)`,[mat.nome,mat.luogo,pest.nome,pest.quantita],(err)=> {
 						if (err) {
 							console.log(err);
 							res.status(500).end();
@@ -95,7 +101,7 @@ function ins_matprima(mat,db,res){
 		})
 	}
 	else{
-		if(mat.mangimi.length != 0){
+		if(mat.mangimi){
 			mat.mangimi.forEach(mang => {
 				db.run(`INSERT INTO alimentazione (nome_materia_prima, luogo_materia_prima, mangime, quantita)
 					VALUES(?,?,?,?)`,[mat.nome,mat.luogo,mang.nome,mang.quantita],(err)=> {

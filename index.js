@@ -9,16 +9,14 @@ var obj = {content: {}};
 /* form management functions */
 
 function getTable() {
-    let index = $('#selTable').val();
-    let url = "";
-    if (isNaN(index)) {
-        url = '/table/' + index;
-    } else {
-        url = '/query/' + index;
-    }
+    let opt = $("#selTable option:selected");
+    if(!opt || opt.val() == "-")
+        return;
+    
+    let url = "/" + opt.parent("optgroup").attr("route") + "/" + opt.val();
+
     $.ajax({
         url: url,
-        data: JSON.stringify(form),
         success: (data) => {
             if(data.length > 0) displayTable(data);
             else $('#display').html(`<p>Nessun dato da visualizzare</p>`)
@@ -355,6 +353,7 @@ function insertProduct(table) {
 
     obj.content['materie_prime'] = materie_prime;
     obj.content['lavorazioni'] = lavorazioni;
+
     
     $.ajax({
         type: "POST",
@@ -435,7 +434,10 @@ $(document).on('change','#tipologia', () =>{
 
 $(document).on('submit','#form_mangimi',  (event) =>{
     event.preventDefault();
-    mangimi.push({mangime: $('#mangime').val(), quantita: $('#quantita').val()});
+    
+    if($('#mangime').val() && $('#quantita').val())
+        mangimi.push({nome: $('#mangime').val(), quantita: $('#quantita').val()});
+
     $("#lista_mangimi").html("");
     mangimi.forEach( (item) => {
         $("#lista_mangimi").append(`<li> ${item.mangime} ${item.quantita}</li>`)
@@ -445,7 +447,10 @@ $(document).on('submit','#form_mangimi',  (event) =>{
 
 $(document).on('submit','#form_fertilizzanti', (event) =>{
     event.preventDefault();
-    fertilizzanti.push({nome: $('#fertilizzante').val(), quantita: $('#quantita_fert').val()});
+    
+    if($('#fertilizzante').val() && $('#quantita_fert').val())
+        fertilizzanti.push({nome: $('#fertilizzante').val(), quantita: $('#quantita_fert').val()});
+    
     $("#lista_fertilizzanti").html("");
     fertilizzanti.forEach( (item) => {
         $("#lista_fertilizzanti").append(`<li> ${item.nome} ${item.quantita}</li>`)
@@ -455,7 +460,10 @@ $(document).on('submit','#form_fertilizzanti', (event) =>{
 
 $(document).on('submit','#form_pesticidi', (event) =>{
     event.preventDefault();
-    pesticidi.push({nome: $('#pesticida').val(), quantita: $('#quantita_pesticida').val()});
+
+    if($('#pesticida').val() && $('#quantita_pesticida').val())
+        pesticidi.push({nome: $('#pesticida').val(), quantita: $('#quantita_pesticida').val()});
+    
     $("#lista_pesticidi").html("");
     pesticidi.forEach( (item) => {
         $("#lista_pesticidi").append(`<li> ${item.nome} ${item.quantita}</li>`)
@@ -465,7 +473,10 @@ $(document).on('submit','#form_pesticidi', (event) =>{
 
 $(document).on('submit','#form_materie_prime', (event) =>{
     event.preventDefault();
-    materie_prime.push({nome_materia_prima: $('#nome_materia_prima').val(), luogo_materia_prima: $('#luogo_materia_prima').val()});
+
+    if($('#nome_materia_prima').val() && $('#luogo_materia_prima').val())
+        materie_prime.push({nome_materia_prima: $('#nome_materia_prima').val(), luogo_materia_prima: $('#luogo_materia_prima').val()});
+
     $("#lista_materie_prime").html("");
     materie_prime.forEach( (item) => {
         $("#lista_materie_prime").append(`<li> ${item.nome_materia_prima} ${item.luogo_materia_prima}</li>`)
@@ -475,7 +486,10 @@ $(document).on('submit','#form_materie_prime', (event) =>{
 
 $(document).on('submit','#form_lavorazione', (event) =>{
     event.preventDefault();
-    lavorazioni.push({procedura_lavorazione: $('#nome_lavorazione').val()});
+    
+    if($('#nome_lavorazione').val())
+        lavorazioni.push({procedura_lavorazione: $('#nome_lavorazione').val()});
+    
     $("#lista_lavorazioni").html("");
     lavorazioni.forEach( (item) => {
         $("#lista_lavorazioni").append(`<li> ${item.procedura_lavorazione}</li>`)
