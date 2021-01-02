@@ -51,7 +51,7 @@ CREATE TABLE lavorazione(
 );
  
 CREATE TABLE materia_prima(
-	nome VARCHAR(10) NOT NULL,
+	nome VARCHAR(20) NOT NULL,
 	luogo VARCHAR(20) NOT NULL,
 	tipologia VARCHAR(20) NOT NULL,
 	qTerra DOUBLE NOT NULL,
@@ -62,63 +62,53 @@ CREATE TABLE materia_prima(
 	CHECK(qAcqua>0),
 	CHECK(qTerra>0),
 	CHECK(CO2>=0),
+	CHECK(tipologia = 'vegetale' or tipologia = 'animale')
 	FOREIGN KEY(fornitore) REFERENCES fornitore(partita_iva)
 );
 
 CREATE TABLE composizione(
-	nome_materia_prima VARCHAR(10) NOT NULL,
+	nome_materia_prima VARCHAR(20) NOT NULL,
 	luogo_materia_prima varchar(20) NOT NULL,
 	prodotto VARCHAR(13) NOT NULL,
-	quantità DOUBLE NOT NULL,
+	quantita DOUBLE NOT NULL,
 	FOREIGN KEY(nome_materia_prima, luogo_materia_prima) REFERENCES materia_prima(nome, luogo),
 	FOREIGN KEY(prodotto) REFERENCES prodotto(ean)
 );
  
-CREATE TABLE fertilizzante(
-	nome VARCHAR(10) NOT NULL PRIMARY KEY,
-	acidificazione DOUBLE,
-	eutrofizzazione DOUBLE
+CREATE TABLE sostanza(
+	nome VARCHAR(20) NOT NULL PRIMARY KEY,
+	tipo VARCHAR(20) NOT NULL,
+	acidificazione DOUBLE NOT NULL,
+	eutrofizzazione DOUBLE NOT NULL,
+	CHECK(tipo = 'fertilizzante' or tipo = 'pesticida')
 );
- 
-CREATE TABLE pesticida(
-	nome VARCHAR(10) NOT NULL PRIMARY KEY,
-	acidificazione DOUBLE,
-	eutrofizzazione DOUBLE
-);
+
 
 CREATE TABLE mangime(
-	nome VARCHAR(10) NOT NULL PRIMARY KEY,
+	nome VARCHAR(20) NOT NULL PRIMARY KEY,
 	componente VARCHAR(20)
 );
- 
-CREATE TABLE utilizzo_fertilizzante(
-	nome_materia_prima VARCHAR(10) NOT NULL,
-	luogo_materia_prima VARCHAR(20) NOT NULL,
-	fertilizzante VARCHAR(10) NOT NULL,
-	quantita DOUBLE,
-	FOREIGN KEY(nome_materia_prima, luogo_materia_prima) REFERENCES materia_prima(nome, luogo),
-	FOREIGN KEY(fertilizzante) REFERENCES fertilizzante(nome),
-	PRIMARY KEY(nome_materia_prima, luogo_materia_prima, fertilizzante)
-);
 
-CREATE TABLE utilizzo_pesticida(
-	nome_materia_prima VARCHAR(10) NOT NULL,
+CREATE TABLE utilizzo(
+	nome_materia_prima VARCHAR(20) NOT NULL,
 	luogo_materia_prima VARCHAR(20) NOT NULL,
-	pesticida VARCHAR(10) NOT NULL,
-	quantita DOUBLE,
+	sostanza VARCHAR(20) NOT NULL,
+	quantita DOUBLE NOT NULL,
 	FOREIGN KEY (nome_materia_prima, luogo_materia_prima) REFERENCES materia_prima(nome, luogo),
-	FOREIGN KEY(pesticida) REFERENCES pesticida(nome),
-	PRIMARY KEY(nome_materia_prima, luogo_materia_prima, pesticida)
+	FOREIGN KEY(sostanza) REFERENCES sostanza(nome),
+	PRIMARY KEY(nome_materia_prima, luogo_materia_prima, sostanza),
+	CHECK(quantita > 0)
 );
 
 CREATE TABLE alimentazione(
-	nome_materia_prima VARCHAR(10) NOT NULL,
+	nome_materia_prima VARCHAR(20) NOT NULL,
 	luogo_materia_prima VARCHAR(20) NOT NULL,
-	mangime VARCHAR(10) NOT NULL,
-	quantità DOUBLE,
+	mangime VARCHAR(20) NOT NULL,
+	quantita DOUBLE NOT NULL,
 	FOREIGN KEY (nome_materia_prima, luogo_materia_prima) REFERENCES materia_prima(nome, luogo),
 	FOREIGN KEY (mangime) REFERENCES mangime(nome),
-	PRIMARY KEY(nome_materia_prima, luogo_materia_prima, mangime)
+	PRIMARY KEY(nome_materia_prima, luogo_materia_prima, mangime),
+	CHECK(quantita > 0)
 )
 
 

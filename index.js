@@ -443,6 +443,9 @@ function insertElement(event) {
 
     $('#form')[0].reset();
     clear();
+
+    /* Update table in case the user is watching one that he just inserted into */
+    getTable();
 }
 
 
