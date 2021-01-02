@@ -21,7 +21,7 @@ function getTable() {
         data: JSON.stringify(form),
         success: (data) => {
             if(data.length > 0) displayTable(data);
-            else $('#display').html(`<p>Nessun dato da visualizzare</p>`)
+            else $('#display').html(`<p style="margin-top:2rem">Nessun dato da visualizzare</p>`)
         },
         error: (e) => {
 
