@@ -10,7 +10,7 @@ var obj = {content: {}};
 /* form management functions */
 
 function getTable() {
-    let index = $('#tables').val();
+    let index = $('#selTable').val();
     $.ajax({
         url: '/table/' + index,
         data: JSON.stringify(form),
@@ -122,7 +122,7 @@ function changeTypeMP() {
 
 function changeForm() {
     let table = $('#tables').val();
-
+    $('#info').show();
     /* remove additional forms */
     $('#div_mangimi').remove();
     $('#div_fertilizzanti').remove();
@@ -366,7 +366,6 @@ function insertProduct(table) {
 
     obj.content['materie_prime'] = materie_prime;
     obj.content['lavorazioni'] = lavorazioni;
-    console.log(obj)
     
     $.ajax({
         type: "POST",

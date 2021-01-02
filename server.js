@@ -64,7 +64,6 @@ function return_rows(res, err, rows) {
 
 app.get('/table/:name', (req,res) => {
 	let table = req.params.name.replace(/\W/g, '');
-	console.log(table)
 	db.all(`select * from ${table}`,
 		(err, rows) => return_rows(res, err, rows))
 });

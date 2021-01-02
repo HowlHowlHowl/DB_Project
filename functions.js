@@ -36,14 +36,15 @@ function ins_prod(prod,db,res){
 				}
 			})
 		})
-		/*
-		db.run(`INSERT INTO lavorazione (prodotto, procedura_lavorazione)
-				VALUES(?,?)`,[prod.EAN,prod.procedura_lavorazione],(err)=> {
-				if (err) {
-					console.log(err);
-					res.status(500).end();
-				}
-		}) */
+		prod.lavorazioni.forEach( (materia) => {
+			db.run(`INSERT INTO lavorazione (prodotto, procedura_lavorazione)
+					VALUES(?,?)`,[prod.EAN,prod.procedura_lavorazione],(err)=> {
+					if (err) {
+						console.log(err);
+						res.status(500).end();
+					}
+			}) 
+		})
 	})
 }
 
