@@ -72,8 +72,8 @@ function ins_matprima(mat,db,res){
 		db.serialize(()=>{
 			if(mat.fertilizzanti){
 				mat.fertilizzanti.forEach(fert => {
-					db.run(`INSERT INTO utilizzo_fertilizzante (nome_materia_prima, luogo_materia_prima, fertilizzante, quantita)
-						VALUES(?,?,?,?)`,[mat.nome,mat.luogo,fert.nome,fert.quantita],(err)=> {
+					db.run(`INSERT INTO utilizzo (nome_materia_prima, luogo_materia_prima, sostanza, quantita)
+						VALUES(?,'fertilizzante',?,?)`,[mat.nome,mat.luogo,fert.nome,fert.quantita],(err)=> {
 						if (err) {
 							console.log(err);
 							res.status(500).end();
@@ -83,8 +83,8 @@ function ins_matprima(mat,db,res){
 			}
 			if(mat.pesticidi){
 				mat.pesticidi.forEach(pest => {
-					db.run(`INSERT INTO utilizzo_pesticida (nome_materia_prima, luogo_materia_prima, pesticida, quantita)
-						VALUES(?,?,?,?)`,[mat.nome,mat.luogo,pest.nome,pest.quantita],(err)=> {
+					db.run(`INSERT INTO utilizzo (nome_materia_prima, luogo_materia_prima, sostanza, quantita)
+						VALUES(?,'pesticida',?,?)`,[mat.nome,mat.luogo,pest.nome,pest.quantita],(err)=> {
 						if (err) {
 							console.log(err);
 							res.status(500).end();
@@ -121,8 +121,8 @@ function ins_proc_lav(proc,db,res){
 }
 
 function ins_fert_pest(obj,db,res){
-	db.run(`INSERT INTO ${obj.table} (nome, acidificazione, eutrofizzazione)
-			VALUES(?,?,?)`,[obj.nome,obj.acidificazione,obj.eutrofizzazione], (err)=> {
+	db.run(`INSERT INTO sostanza (nome, tipo, acidificazione, eutrofizzazione)
+			VALUES(?,?,?,?)`,[obj.nome, obj.table, obj.acidificazione, obj.eutrofizzazione], (err)=> {
 				if (err) {
 					console.log(err);
 					res.status(500).end();

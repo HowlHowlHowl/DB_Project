@@ -417,6 +417,10 @@ function insertElement(event) {
     }
 
     $('#form')[0].reset();
+
+    /* Update table in case the user is watching one that he just inserted into */
+    getTable();
+
     /* clear arrays */
     fertilizzanti = []; pesticidi = []; mangimi = [];
     materie_prime = []; lavorazioni = [];

@@ -30,7 +30,7 @@ app.get('/index.js', (req,res) =>{
 //route to insert data into tables
 app.post('/insertData', (req,res) =>{
 	let el = req.body.content;
-	console.log(el)
+	console.log(el);
 	
 	switch(el.table){
 		//same attributes for these 3 cases
@@ -155,7 +155,7 @@ function query13(res) {
 
 function query14(res) {
 	db.all(`
-		select nome, CO2_trasporto, tipo_trasporto
+		select nome, CO2_trasporto, tipo_trasporto, tratta_trasporto
 		from prodotto
 	`, (err, rows) => return_rows(res, err, rows));
 }
