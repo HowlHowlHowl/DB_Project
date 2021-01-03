@@ -117,16 +117,10 @@ function query12(res) {
 
 function query13(res) {
 	db.all(`
-		create view max_alimentazione(nome, luogo, quantita) as (
-			select nome_materia_prima, luogo_materia_prima, MAX(quantita)
-			from alimentazione
-			group by nome_materia_prima, luogo_materia_prima
-		)
-
 		select a.nome_materia_prima, a.luogo_materia_prima, a.quantita, m.componente
 		from (alimentazione as a join max_alimentazione as maxa 
 			  on a.nome_materia_prima = maxa.nome and a.luogo_materia_prima = maxa.luogo and a.quantita = maxa.quantita) 
-			 join mangime as m on a.mangime = m.name
+			 join mangime as m on a.mangime = m.nome
 	`, (err, rows) => return_rows(res, err, rows));
 }
 
@@ -136,6 +130,7 @@ function query14(res) {
 		from prodotto
 	`, (err, rows) => return_rows(res, err, rows));
 }
+
 
 app.listen(8000, ()=>{
 	console.log("Server is listening");
