@@ -165,7 +165,7 @@ function fillSelect(table) {
                     <label for="sostanza${index}">${element['nome']}</label>
                     </div>
                     <div style="width: 20%;display: flex;">
-                        <input type="text" class="form-control" id="quantita_S${index}" placeholder="20">
+                        <input type="text" class="form-control" id="quantita_s${index}" placeholder="20">
                     </div>`);
                 })
             }
@@ -521,7 +521,7 @@ function insertElement(event) {
             $('#db_error').show();
         }
     }); 
-
+    console.log(obj)
     $('#form')[0].reset();
 
     /* Update table in case the user is watching one that he just inserted into */
