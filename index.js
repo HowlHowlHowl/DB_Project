@@ -107,7 +107,7 @@ function fillSelect(table) {
                 data.forEach((element, index) => {
                     $('#materie_prime').append(`
                     <div style="margin-right: 2rem; float: left;">
-                        <input type="checkbox" id="mat${index}" value="${element['nome']}-${element['luogo']}">
+                        <input type="checkbox" id="mat${index}" value="${element['nome']}-${element['luogo']}" onchange="add_required_checkbox(${index})" required>
                         <label for="mat${index}"> ${element['nome']} - ${element['luogo']}</label>
                     </div>
                     <div style="width: 20%;display: flex;">
@@ -260,7 +260,7 @@ function changeForm() {
             $('#data').val(String(today.getDate()).padStart(2, '0') + 
                     '/' + String(today.getMonth() + 1).padStart(2, '0') + 
                     '/' + String(today.getFullYear()));
-            $('#parameters').append(`
+            $('#form').append(`
             <div id="div_materie_prime" style="margin-top: 2rem;">
                 <p style="font-weight:bold"> Seleziona le materie prime che compongono il prodotto </p>
                 <div id="materie_prime">
@@ -534,6 +534,29 @@ function insertElement(event) {
 $(document).on('change','#tipologia', () =>{
     this.changeTypeMP();
 });
+
+//add required attribute to the 'quantita' input of the checked checkboxes
+function add_required_checkbox(index){
+    let el = $(`#mat${index}`);
+    //if i check the checkbox
+    if(el.is(':checked')){
+        $(`#quantita${index}`).prop('required',true);
+    }
+    else{
+        $(`#quantita${index}`).prop('required',false);
+    }  
+
+    //At least one materia_prima needs to be selected when a product is inserted
+    let mat_prime_checkbox = $("#materie_prime input[type=checkbox]");
+    if($("#materie_prime input[type=checkbox]:checked").length > 0){
+        mat_prime_checkbox.prop('required',false);
+    }else{
+        mat_prime_checkbox.prop('required',true);
+    }
+}
+
+
+
 /*
 
 $(document).on('submit','#form_mangimi',  (event) =>{
