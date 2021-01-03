@@ -110,8 +110,54 @@ CREATE TABLE alimentazione(
 	FOREIGN KEY (mangime) REFERENCES mangime(nome),
 	PRIMARY KEY(nome_materia_prima, luogo_materia_prima, mangime),
 	CHECK(quantita > 0)
-)
+);
 
 
 
+create view materia_acid_eutr(nome, luogo, acid, eutr) as
+    select  u.nome_materia_prima, 
+            u.luogo_materia_prima,
+            sum(s.acidificazione * u.quantita),
+            sum(s.eutrofizzazione * u.quantita)
+    from utilizzo as u join sostanza as s on u.sostanza = s.nome
+    group by u.nome_materia_prima, u.luogo_materia_prima;
 
+create view impatto_materia(nome, luogo, acqua, CO2, terra, acid, eutr) as
+    select  m.nome, 
+            m.luogo, 
+            m.qAcqua,
+            m.qTerra,
+            m.CO2,
+			ifnull(mae.acid, 0),
+			ifnull(mae.eutr, 0)
+    from materia_prima as m left join materia_acid_eutr as mae on m.luogo = mae.luogo and m.nome = mae.nome;
+
+create view impatto_composizione(EAN, acqua, CO2, terra, acid, eutr) as
+    select c.prodotto,
+            sum(m.acqua * c.quantita),
+            sum(m.CO2 * c.quantita),
+            sum(m.terra * c.quantita), 
+            sum(m.acid * c.quantita), 
+            sum(m.eutr * c.quantita)
+    from impatto_materia as m join composizione as c on m.luogo = c.luogo_materia_prima and m.nome = c.nome_materia_prima
+    group by c.prodotto;
+
+create view impatto_lavorazione(EAN, acqua, CO2) as
+    select l.prodotto, sum(pl.CO2), sum(pl.qAcqua)
+    from lavorazione as l join procedura_lavorazione as pl on l.procedura_lavorazione = pl.tipo
+    group by l.prodotto;
+
+create view impatto_prodotto(EAN, acqua, CO2, terra, acid, eutr) as
+    select  p.EAN,
+            c.acqua + ifnull(l.acqua, 0), 
+            c.CO2 + ifnull(l.CO2, 0) + (p.CO2_trasporto * (p.peso / 1000) * p.tratta_trasporto),
+            c.terra,
+            c.acid,
+            c.eutr
+    from (prodotto as p left join impatto_lavorazione as l on p.EAN = l.EAN) join impatto_composizione as c on p.EAN = c.EAN;
+
+
+create view max_alimentazione(nome, luogo, quantita) as
+	select nome_materia_prima, luogo_materia_prima, MAX(quantita)
+	from alimentazione
+	group by nome_materia_prima, luogo_materia_prima;

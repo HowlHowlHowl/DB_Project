@@ -44,21 +44,24 @@
 			border-radius: 3px;
     		margin-left: 1rem;
 		}
+
+		.dropdown {
+			max-width: 80%;
+		}
 	</style>
 </head>
 
 	<body style="background-color: #0d0d0d; color: white; height:100%">
-		<div id="commands" style="width:50%; min-height: 100%; float: left; border-right: 1px solid rgba(255, 255, 255, 0.4); padding: 2rem">
+		<div id="commands" style="width:50%; min-height: 100%; float: left; padding: 2rem">
 			<div style=" padding-bottom: 2rem;">
 				<label for="tables" style="font-weight: 900;">Seleziona tabella</label>
-				<span id="db_error" style="background-color: red;display:none">La richiesta non è andata a buon fine, prova di nuovo</span>
 				<select id="tables" onchange="changeForm()">
 					<option value="-">---</option>
 						<option value="produttore">Produttore</option>
 						<option value="fornitore">Fornitore</option>
 						<option value="azienda_trasporti">Azienda di Trasporti</option>
 						<option value="prodotto">Prodotto</option>
-						<option value="package">Imballaggio</option>
+						<option value="package">Package</option>
 						<option value="procedura_lavorazione">Procedura di Lavorazione</option>
 						<option value="materia_prima">Materia Prima</option>
 						<option value="fertilizzante">Fertilizzante</option>
@@ -66,7 +69,8 @@
 						<option value="mangime">Mangime</option>
 				</select>
 			</div>
-			<div id="parameters">
+			<span id="db_error" style="color: red;">La richiesta non è andata a buon fine, prova di nuovo</span>
+			<div id="parameters" style="margin-top:2rem">
 				<div id="info" style="display:none">
 					<button id="insertBtn" type="submit" form="form" style="float:right;border-radius: 3px;border: 1px solid white;box-shadow: 0 0 7px 0px white;">Inserisci elemento</button>
 					<p style="font-weight: bold;">Campi di inserimento</p>
@@ -74,7 +78,7 @@
 				<form id="form" onsubmit="insertElement(event)"></form>
 			</div>
 		</div>
-		<div style="width:50%; height: 100%; float:right; padding: 2rem">
+		<div style="width:50%; min-height: 100%; float:right; padding: 2rem">
 			<label for="selTable"  style="font-weight: 900;">Visualizza tabella</label>
 			<select id="selTable" onchange="getTable()">
 				<option value="-">---</option>
@@ -83,7 +87,7 @@
 					<option value="fornitore">Fornitori</option>
 					<option value="azienda_trasporti">Aziende di Trasporti</option>
 					<option value="prodotto">Prodotti</option>
-					<option value="package">Imballaggi</option>
+					<option value="package">Packages</option>
 					<option value="procedura_lavorazione">Procedure di Lavorazione</option>
 					<option value="materia_prima">Materie Prime</option>
 					<option value="sostanza">Fertilizzanti/Pesticidi</option>

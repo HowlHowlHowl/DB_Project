@@ -97,10 +97,10 @@ function fillSelect(table) {
                 data.forEach((element, index) => {
                     $('#materie_prime').append(`
                     <div style="margin-right: 2rem; float: left;">
-                        <input type="checkbox" id="mat${index}" value="${element['nome']}-${element['luogo']}">
+                        <input type="checkbox" id="mat${index}" value="${element['nome']}-${element['luogo']}" onchange="add_required_checkbox(${index})" required>
                         <label for="mat${index}"> ${element['nome']} - ${element['luogo']}</label>
                     </div>
-                    <div style="width: 20%;display: flex;">
+                    <div style="width: 20%;display: flex; margin-bottom: 1rem;">
                         <input type="text" class="form-control" id="quantita${index}" placeholder="20">
                     </div>`);
                 })
@@ -134,11 +134,11 @@ function fillSelect(table) {
                 $('#mangimi').html("");
                 data.forEach((element, index) => {
                     $('#mangimi').append(`
-                    <div style="margin-right: 2rem; float: left;">
+                    <div style="margin-right: 2rem; float: left; ">
                     <input type="checkbox" id="mangime${index}" value="${element['nome']}">
                     <label for="mangime${index}">${element['nome']}</label>
                     </div>
-                    <div style="width: 20%;display: flex;">
+                    <div style="width: 20%;display: flex; margin-bottom: 1rem;">
                         <input type="text" class="form-control" id="quantita_m${index}" placeholder="20">
                     </div>`);
                 })
@@ -154,7 +154,7 @@ function fillSelect(table) {
                     <input type="checkbox" id="sostanza${index}" value="${element['nome']}">
                     <label for="sostanza${index}">${element['nome']}</label>
                     </div>
-                    <div style="width: 20%;display: flex;">
+                    <div style="width: 20%;display: flex; margin-bottom: 1rem;">
                         <input type="text" class="form-control" id="quantita_s${index}" placeholder="20">
                     </div>`);
                 })
@@ -213,13 +213,13 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="azienda_trasporti">Azienda di trasporto</label>
-                    <select id="azienda_trasporti" disabled required>
+                    <select id="azienda_trasporti" class="dropdown" disabled required>
                         <option value="">---</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="tipo_trasporto">Tipo di trasporto</label>
-                    <select id="tipo_trasporto">
+                    <select id="tipo_trasporto" class="dropdown">
                             <option value="strada">Su strada</option>
                             <option value="rotaia">Su rotaia</option>
                             <option value="marittimo">Marittimo</option>
@@ -236,13 +236,13 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="package">Package</label>
-                    <select id="package" disabled required>
+                    <select id="package" class="dropdown" disabled required>
                             <option value="">---</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="produttore">Azienda produttrice</label>
-                    <select id="produttore" disabled required>
+                    <select id="produttore" class="dropdown" disabled required>
                             <option value="-">---</option>
                     </select>
                 </div>
@@ -250,7 +250,7 @@ function changeForm() {
             $('#data').val(String(today.getDate()).padStart(2, '0') + 
                     '/' + String(today.getMonth() + 1).padStart(2, '0') + 
                     '/' + String(today.getFullYear()));
-            $('#parameters').append(`
+            $('#form').append(`
             <div id="div_materie_prime" style="margin-top: 2rem;">
                 <p style="font-weight:bold"> Seleziona le materie prime che compongono il prodotto </p>
                 <div id="materie_prime">
@@ -314,14 +314,14 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="fornitore">Fornitore</label>
-                    <select id="fornitore" disabled required>
+                    <select id="fornitore" class="dropdown" disabled required>
                         <option value="-">---</option>
                     </select>
                 </div>`);
 
                 $('#parameters').append(`
                     <div id="div_mangimi" style="margin-top: 2rem;" >
-                        <p style="font-weight:bold"> Seleziona i mangimi utlizzati e specificane la quantità utilizzata(g)</p>
+                        <p style="font-weight:bold"> Seleziona i mangimi utlizzati e specificane la quantità utilizzata(kg)</p>
                         <div id="mangimi">
                         <p> Nessuna mangime disponibile </p>
                         </div>
@@ -329,7 +329,7 @@ function changeForm() {
 
                 $('#parameters').append(`
                 <div id="div_sostanze" style="margin-top: 2rem; display: none">
-                    <p style="font-weight:bold"> Seleziona i fertilizzanti/pesticidi e specificane la quantità utilizzata(g)</p>
+                    <p style="font-weight:bold"> Seleziona i fertilizzanti/pesticidi e specificane la quantità utilizzata(kg)</p>
                     <div id="sostanze">
                     <p> Nessuna sostanza disponibile </p>
                     </div>
@@ -339,7 +339,7 @@ function changeForm() {
         else if(table == 'package') {
             $('#form').html(`<div class="form-group">
                 <label for="codice">Codice package</label>
-                <input type="text" class="form-control" id="codice" placeholder="" required>
+                <input type="text" class="form-control" id="codice" placeholder="1" required>
                 </div>
                 <div class="form-group">
                     <label for="tipo">Tipo</label>
@@ -351,7 +351,7 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="volume">Volume occupato (cm<sup>3</sup>)</label>
-                    <input type="text" class="form-control" id="volume" placeholder="20">
+                    <input type="text" class="form-control" id="volume" placeholder="200">
                 </div>
                 <div class="form-group">
                     <label for="peso">Peso del package (kg)</label>
@@ -389,11 +389,11 @@ function changeForm() {
         else if(table == 'mangime') {
             $('#form').html(`<div class="form-group">
                 <label for="nome">Nome</label>
-                <input type="text" class="form-control" id="nome" placeholder="Orijen Red" required>
+                <input type="text" class="form-control" id="nome" placeholder="COD M2PL" required>
                 </div>
                 <div class="form-group">
                     <label for="componente">Componente principale</label>
-                    <input type="text" class="form-control" id="componente" placeholder="farine di cereali">
+                    <input type="text" class="form-control" id="componente" placeholder="Farine di cereali">
                 </div>`);
         }
 
@@ -476,7 +476,7 @@ function insertElement(event) {
             $('#db_error').show();
         }
     }); 
-    console.log(obj)
+
     $('#form')[0].reset();
 
     /* Update table in case the user is watching one that he just inserted into */
@@ -487,3 +487,29 @@ function insertElement(event) {
 $(document).on('change','#tipologia', () =>{
     this.changeTypeMP();
 });
+
+//add required attribute to the 'quantita' input of the checked checkboxes
+function add_required_checkbox(index){
+    let el = $(`#mat${index}`);
+    //if i check the checkbox
+    if(el.is(':checked')){
+        $(`#quantita${index}`).prop('required',true);
+    }
+    else{
+        $(`#quantita${index}`).prop('required',false);
+    }  
+
+    //At least one materia_prima needs to be selected when a product is inserted
+    let mat_prime_checkbox = $("#materie_prime input[type=checkbox]");
+    if($("#materie_prime input[type=checkbox]:checked").length > 0){
+        mat_prime_checkbox.prop('required',false);
+    }else{
+        mat_prime_checkbox.prop('required',true);
+    }
+}
+
+window.onload = function() {
+    $('#db_error').hide();
+}
+
+

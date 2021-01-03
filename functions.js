@@ -28,9 +28,9 @@ function ins_prod(prod,db,res){
 				}
 		})
 		if(prod.materie_prime) {
-			prod.materie_prime.forEach( (materia) => {
+			prod.materie_prime.forEach( (materia,ind) => {
 				db.run(`INSERT INTO composizione (nome_materia_prima, luogo_materia_prima, prodotto, quantita)
-					VALUES(?,?,?,?)`,[materia.nome_materia_prima,materia.luogo_materia_prima,prod.EAN,prod.quantita],(err)=> {
+					VALUES(?,?,?,?)`,[materia.nome_materia_prima,materia.luogo_materia_prima,prod.EAN,prod[`quantita${ind}`]],(err)=> {
 					if (err) {
 						console.log(err);
 						res.status(500).end();
@@ -51,7 +51,27 @@ function ins_prod(prod,db,res){
 				}) 
 			})
 		}
-	})
+
+		/* Update score */
+		db.run(`
+			update prodotto
+			set valore_di_impatto = (
+				select i.acqua * 1.15e4 +
+					   i.CO2 * 8.4e3 +
+					   (i.terra * 79) * 1.4e6 +
+					   (i.eutr / 1000) * 7.34e-1 +
+					   (i.acid / 32) * 5.55e1
+				from impatto_prodotto as i
+				where i.EAN = ?
+			)
+			where EAN = ?
+		`, [prod.EAN, prod.EAN],  (err)=> {
+			if (err) {
+				console.log(err);
+				res.status(500).end();
+			}
+		});
+	});
 }
 
 function ins_package(pack,db,res){

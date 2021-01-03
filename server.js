@@ -27,6 +27,7 @@ app.get('/index.js', (req,res) =>{
 	res.status(200).sendFile(path.join(__dirname,'index.js'));
 })
 
+
 //route to insert data into tables
 app.post('/insertData', (req,res) =>{
 	let el = req.body.content;
@@ -45,9 +46,8 @@ app.post('/insertData', (req,res) =>{
 		case 'fertilizzante':
 		case 'pesticida': ins_functions.ins_fert_pest(el,db,res); break;
 		case 'mangime': ins_functions.ins_mangime(el,db,res); break;
-		default: res.status(400).end(); console.log("Tabella non esistente");
+		default: res.status(400).end(); console.log("Tabella inesistente");
 	}
-	
 	res.status(200).end();
 })
 
@@ -117,16 +117,10 @@ function query12(res) {
 
 function query13(res) {
 	db.all(`
-		create view max_alimentazione(nome, luogo, quantita) as (
-			select nome_materia_prima, luogo_materia_prima, MAX(quantita)
-			from alimentazione
-			group by nome_materia_prima, luogo_materia_prima
-		)
-
 		select a.nome_materia_prima, a.luogo_materia_prima, a.quantita, m.componente
 		from (alimentazione as a join max_alimentazione as maxa 
 			  on a.nome_materia_prima = maxa.nome and a.luogo_materia_prima = maxa.luogo and a.quantita = maxa.quantita) 
-			 join mangime as m on a.mangime = m.name
+			 join mangime as m on a.mangime = m.nome
 	`, (err, rows) => return_rows(res, err, rows));
 }
 
@@ -136,6 +130,7 @@ function query14(res) {
 		from prodotto
 	`, (err, rows) => return_rows(res, err, rows));
 }
+
 
 app.listen(8000, ()=>{
 	console.log("Server is listening");
