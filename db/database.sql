@@ -22,6 +22,7 @@ CREATE TABLE prodotto(
 	azienda_trasporti VARCHAR(11) NOT NULL,
 	tipo_trasporto VARCHAR(20), 
 	CO2_trasporto DOUBLE NOT NULL,
+	tratta_trasporto DOUBLE NOT NULL,
 	package INT NOT NULL,
 	produttore VARCHAR(11) NOT NULL, 
 	FOREIGN KEY(azienda_trasporti) REFERENCES azienda_trasporti(partita_iva),

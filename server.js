@@ -69,7 +69,7 @@ app.get('/table/:name', (req,res) => {
 });
 
 app.get('/query/:number', (req, res) => {
-	switch(req.params.number) {
+	switch(Number(req.params.number)) {
 		case  9: query9 (res); break;
 		case 10: query10(res); break;
 		case 11: query11(res); break;
@@ -82,7 +82,7 @@ app.get('/query/:number', (req, res) => {
 
 function query9(res) {
 	db.all(`
-		select p.EAN, p.nome, sum(pl.CO2) as CO2_totale, sum(pl.acqua) as acqua_totale
+		select p.EAN, p.nome, sum(pl.CO2) as CO2_totale, sum(pl.qAcqua) as acqua_totale
 		from (prodotto as p join lavorazione as l on p.EAN = l.prodotto)
 			join procedura_lavorazione as pl on l.procedura_lavorazione = pl.tipo
 		group by p.EAN
@@ -106,35 +106,12 @@ function query11(res) {
 
 function query12(res) {
 	db.all(`
-		create view materia_f(nome, luogo, eutrofizzazione, acidificazione) as (
-			select m.nome, m.luogo, uf.quantita * f.eutrofizzazione,  uf.quantita * f.acidificazione
-			from (materia_prima as m join utilizzo_fertilizzante as uf on 
-				  m.luogo = uf.luogo_materia_prima and m.nome = uf.nome_materia_prima) join
-				  fertilizzante as f on uf.fertilizzante = f.nome
-		)
-
-		create view materia_p(nome, luogo, eutrofizzazione, acidificazione) as (
-			select m.nome, m.luogo, up.quantita * p.eutrofizzazione,  up.quantita * p.acidificazione
-			from (materia_prima as m join utilizzo_pesticida as up on 
-				  m.luogo = up.luogo_materia_prima and m.nome = up.nome_materia prima) join
-				  pesticida as p on up.pesticida = p.nome
-		)
-
-		create view materia_totale_f(nome, luogo, eutrofizzazione_totale, acidificazione_totale) as (
-			select nome, luogo, sum(eutrofizzazione), sum(acidificazione)
-			from materia_f
-			group by nome, luogo
-		)
-		
-		create view materia_totale_p(nome, luogo, eutrofizzazione_totale, acidificazione_totale) as (
-			select nome, luogo, sum(eutrofizzazione), sum(acidificazione)
-			from materia_p
-			group by nome, luogo
-		)
-
-		select m.nome, m.luogo, (ifnull(f.eutrofizzazione, 0) + ifnull(p.eutrofizzazione, 0)), 
-								(ifnull(f.acidificazione, 0)  + ifnull(p.acidificazione, 0))
-		from materia_totale_f as f full outer join materia_totale_p as p on f.nome = p.nome and f.luogo = p.luogo
+		select u.nome_materia_prima as 'Nome', 
+		       u.luogo_materia_prima as 'Luogo', 
+			   sum(s.acidificazione * u.quantita) as 'Totale Acidificazione', 
+			   sum(s.eutrofizzazione * u.quantita) as 'Totale Eutrofizzazione'
+		from utilizzo as u join sostanza as s on u.sostanza = s.nome
+		group by u.nome_materia_prima, u.luogo_materia_prima
 	`, (err, rows) => return_rows(res, err, rows));
 }
 
