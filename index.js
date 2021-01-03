@@ -204,6 +204,7 @@ function changeForm() {
                 </div>`);
         }
         else if(table == 'prodotto') {
+            let today =  new Date(); 
             $('#form').html(`<div class="form-group">
                 <label for="EAN">Codice EAN</label>
                 <input type="text" class="form-control" id="EAN" placeholder="2412345678901" required>
@@ -216,9 +217,9 @@ function changeForm() {
                     <label for="peso">Peso (g)</label>
                     <input type="text" class="form-control" id="peso" placeholder="200" required>
                 </div>
-                <div class="form-group">
-                    <label for="data">Data</label>
-                    <input type="text" class="form-control" id="data" placeholder="30/12/2020">
+                <div class="form-group">	
+                    <label for="data">Data</label>	
+                    <input type="text" class="form-control" id="data" placeholder="30/12/2020">	
                 </div>
                 <div class="form-group">
                     <label for="azienda_trasporti">Azienda di trasporto</label>
@@ -256,7 +257,9 @@ function changeForm() {
                     </select>
                 </div>
             `);
-    
+            $('#data').val(String(today.getDate()).padStart(2, '0') + 
+                    '/' + String(today.getMonth() + 1).padStart(2, '0') + 
+                    '/' + String(today.getFullYear()));
             $('#parameters').append(`
             <div id="div_materie_prime" style="margin-top: 2rem;">
                 <p style="font-weight:bold"> Seleziona le materie prime che compongono il prodotto </p>
