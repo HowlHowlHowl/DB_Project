@@ -19,9 +19,9 @@ function ins_prod(prod,db,res){
 
 	//to avoid parallel execution
 	db.serialize(()=>{
-		db.run(`INSERT INTO ${prod.table} (EAN, nome, valore_di_impatto, peso, data, azienda_trasporti, tipo_trasporto, CO2_trasporto, package, produttore)
-			VALUES(?,?,?,?,?,?,?,?,?,?)`,[prod.EAN,prod.nome,prod.valore_di_impatto,prod.peso,prod.data,prod.azienda_trasporti,prod.tipo_trasporto,
-				prod.CO2,prod.package,prod.produttore],(err)=> {
+		db.run(`INSERT INTO ${prod.table} (EAN, nome, valore_di_impatto, peso, data, azienda_trasporti, tipo_trasporto, CO2_trasporto, tratta_trasporto, package, produttore)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?)`,[prod.EAN,prod.nome,prod.valore_di_impatto,prod.peso,prod.data,prod.azienda_trasporti,prod.tipo_trasporto,
+				prod.CO2,prod.tratta_trasporto,prod.package,prod.produttore],(err)=> {
 				if (err) {
 					console.log(err);
 					res.status(500).end();

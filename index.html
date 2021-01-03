@@ -51,6 +51,7 @@
 		<div id="commands" style="width:50%; min-height: 100%; float: left; border-right: 1px solid rgba(255, 255, 255, 0.4); padding: 2rem">
 			<div style=" padding-bottom: 2rem;">
 				<label for="tables" style="font-weight: 900;">Seleziona tabella</label>
+				<span id="db_error" style="background-color: red;display:none">La richiesta non è andata a buon fine, prova di nuovo</span>
 				<select id="tables" onchange="changeForm()">
 					<option value="-">---</option>
 						<option value="produttore">Produttore</option>
