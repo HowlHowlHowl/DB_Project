@@ -164,10 +164,6 @@ function changeForm() {
                     <input type="text" class="form-control" id="peso" placeholder="200" required>
                 </div>
                 <div class="form-group">
-                    <label for="data">Data</label>
-                    <input type="text" class="form-control" id="data" placeholder="30/12/2020">
-                </div>
-                <div class="form-group">
                     <label for="azienda_trasporti">Azienda di trasporto</label>
                     <select id="azienda_trasporti" disabled required>
                         <option value="">---</option>
@@ -405,6 +401,9 @@ function insert(table) {
 function insertProduct(table) {
     obj.content['materie_prime'] = materie_prime;
     obj.content['lavorazioni'] = lavorazioni;
+    
+    let today =  new Date();
+    obj.content['data'] = today.getDay() + '/' + today.getMonth() + '/' + today.getFullYear(); 
 }
 
 function insertRaw(table) {
