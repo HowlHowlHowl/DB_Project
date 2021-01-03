@@ -93,10 +93,10 @@ function fillSelect(table) {
 
         $.get('/table/produttore', function( data ) {
             if(data.length > 0) {
-                $('#azienda_produttrice').attr('disabled', false);
-                $('#azienda_produttrice').html("");
+                $('#produttore').attr('disabled', false);
+                $('#produttore').html("");
                 data.forEach((element) => {
-                    $('#azienda_produttrice').append(`<option>${element['nome']} ${element['ragione_sociale']}</option>`);
+                    $('#produttore').append(`<option>${element['nome']} ${element['ragione_sociale']}</option>`);
                 })
             }
         });
