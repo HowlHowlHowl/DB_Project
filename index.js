@@ -1,8 +1,8 @@
-var fertilizzanti = [];
+/*var fertilizzanti = [];
 var pesticidi = [];
 var mangimi = [];
 var materie_prime = [];
-var lavorazioni = [];
+var lavorazioni = []; */
 let already_ins = false;
 var obj = {content: {}};
 
@@ -52,25 +52,21 @@ function displayTable(data) {
     $('#display').html(db_table)
 }
 
+/* 
 function clear() {
-    /* clear arrays */
     fertilizzanti = []; pesticidi = []; mangimi = [];
     materie_prime = []; lavorazioni = [];
-}
+} */
 
 function changeTypeMP() {
     let type_mp = $('#tipologia').val();
     if(type_mp == 'animale') {
-        pesticidi = []; fertilizzanti = [];
         $('#div_mangimi').show();
-        $('#div_fertilizzanti').hide();
-        $('#div_pesticidi').hide();
+        $('#div_sostanze').hide();
     }
     if(type_mp == 'vegetale') {
-        mangimi = [];
-        $('#div_mangimi').css("display", "none");
-        $('#div_fertilizzanti').show();
-        $('#div_pesticidi').show();
+        $('#div_mangimi').hide();
+        $('#div_sostanze').show();
     }
 }
 
@@ -110,8 +106,13 @@ function fillSelect(table) {
                 $('#materie_prime').html("");
                 data.forEach((element, index) => {
                     $('#materie_prime').append(`
-                    <input type="checkbox" id="mat${index}" value="${element['nome']}-${element['luogo']}">
-                    <label for="mat${index}"> ${element['nome']} - ${element['luogo']}</label><br>`);
+                    <div style="margin-right: 2rem; float: left;">
+                        <input type="checkbox" id="mat${index}" value="${element['nome']}-${element['luogo']}">
+                        <label for="mat${index}"> ${element['nome']} - ${element['luogo']}</label>
+                    </div>
+                    <div style="width: 20%;display: flex;">
+                        <input type="text" class="form-control" id="quantita${index}" placeholder="20">
+                    </div>`);
                 })
             }
         });
@@ -137,6 +138,38 @@ function fillSelect(table) {
                 })
             }
         });
+        
+        $.get('/table/mangime', function( data ) {
+            if(data.length > 0) {
+                $('#mangimi').html("");
+                data.forEach((element, index) => {
+                    $('#mangimi').append(`
+                    <div style="margin-right: 2rem; float: left;">
+                    <input type="checkbox" id="mangime${index}" value="${element['nome']}">
+                    <label for="mangime${index}">${element['nome']}</label>
+                    </div>
+                    <div style="width: 20%;display: flex;">
+                        <input type="text" class="form-control" id="quantita_m${index}" placeholder="20">
+                    </div>`);
+                })
+            }
+        });
+
+        $.get('/table/sostanza', function( data ) {
+            if(data.length > 0) {
+                $('#sostanze').html("");
+                data.forEach((element, index) => {
+                    $('#sostanze').append(`
+                    <div style="margin-right: 2rem; float: left;">
+                    <input type="checkbox" id="sostanza${index}" value="${element['nome']}">
+                    <label for="sostanza${index}">${element['nome']}</label>
+                    </div>
+                    <div style="width: 20%;display: flex;">
+                        <input type="text" class="form-control" id="quantita_S${index}" placeholder="20">
+                    </div>`);
+                })
+            }
+        });
     }
 }
 
@@ -147,12 +180,9 @@ function changeForm() {
 
     /* remove additional forms */
     $('#div_mangimi').remove();
-    $('#div_fertilizzanti').remove();
-    $('#div_pesticidi').remove();
+    $('#div_sostanze').remove();
     $('#div_materie_prime').remove();
-    $('#div_lavorazione').remove();
-
-    clear();
+    $('#div_lavorazione').remove(); 
 
     if(table == '-') {
         $('#form').html("");
@@ -228,7 +258,7 @@ function changeForm() {
             `);
     
             $('#parameters').append(`
-            <div id="div_materie_prime" style="background-color: #2b3d4a;padding: 2rem;">
+            <div id="div_materie_prime" style="margin-top: 2rem;">
                 <p style="font-weight:bold"> Seleziona le materie prime che compongono il prodotto </p>
                 <div id="materie_prime">
                 <p> Nessuna materia prima disponibile </p>
@@ -242,14 +272,18 @@ function changeForm() {
                         <label for="luogo_materia_prima">Luogo</label>
                         <input type="text" class="form-control" id="luogo_materia_prima" placeholder="" required>
                     </div>
-                    <input type="submit" value="Aggiungi"> 
+                    <div class="form-group">
+                        <label for="quantita">Quantità</label>
+                        <input type="text" class="form-control" id="quantita" placeholder="" required>
+                    </div>
+                    <input type="submit" value="Aggiungi">
                 </form>
                 <ul id="lista_materie_prime" style="margin-top:2rem"></ul> -->
             </div>`);
             
     
             $('#parameters').append(`
-            <div id="div_lavorazione" style="background-color: #2b3d4a;padding: 2rem;">
+            <div id="div_lavorazione" style="margin-top: 2rem;">
                 <p style="font-weight:bold"> Seleziona le lavorazioni necessarie alla produzione </p>
                 <div id="lavorazioni">
                 <p> Nessuna lavorazione disponibile </p>
@@ -302,8 +336,12 @@ function changeForm() {
                 </div>`);
 
                 $('#parameters').append(`
-                    <div id="div_mangimi" style="background-color: #2b3d4a;padding: 2rem;" >
-                    <form id="form_mangimi">
+                    <div id="div_mangimi" style="margin-top: 2rem;" >
+                        <p style="font-weight:bold"> Seleziona i mangimi utlizzati e specificane la quantità utilizzata(g)</p>
+                        <div id="mangimi">
+                        <p> Nessuna mangime disponibile </p>
+                        </div>
+               <!--     <form id="form_mangimi">
                         <p> Aggiungi i mangimi utilizzati per la materia prima inserita </p>
                         <div class="form-group">
                             <label for="mangime">Nome</label>
@@ -315,12 +353,16 @@ function changeForm() {
                         </div>
                         <input type="submit" value="Aggiungi">
                     </form>
-                    <ul id="lista_mangimi" style="margin-top:2rem"></ul>
+                    <ul id="lista_mangimi" style="margin-top:2rem"></ul> -->
                     </div>`);
 
                 $('#parameters').append(`
-                <div id="div_fertilizzanti" style="background-color: #2b3d4a;padding: 2rem; display: none">
-                <form id="form_fertilizzanti">
+                <div id="div_sostanze" style="margin-top: 2rem; display: none">
+                    <p style="font-weight:bold"> Seleziona i fertilizzanti/pesticidi e specificane la quantità utilizzata(g)</p>
+                    <div id="sostanze">
+                    <p> Nessuna sostanza disponibile </p>
+                    </div>
+           <!--     <form id="form_fertilizzanti">
                     <p> Aggiungi i fertilizzanti utilizzati per la materia prima inserita </p>
                     <div class="form-group">
                         <label for="fertilizzante">Nome</label>
@@ -332,22 +374,7 @@ function changeForm() {
                     </div>
                     <input type="submit" value="Aggiungi">
                 </form>
-                <ul id="lista_fertilizzanti" style="margin-top:2rem"></ul>
-                </div>
-                <div id="div_pesticidi" style="background-color: #2b3d4a;padding: 2rem; display: none">
-                <form id="form_pesticidi">
-                    <p> Aggiungi i pesticidi utilizzati per la materia prima inserita </p>
-                    <div class="form-group">
-                        <label for="pesticida">Nome</label>
-                        <input type="text" class="form-control" id="pesticida" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="quantita_pesticida">Quantità di pesticida utilizzata</label>
-                        <input type="text" class="form-control" id="quantita_pesticida" placeholder="">
-                    </div>
-                    <input type="submit" value="Aggiungi">
-                </form>
-                <ul id="lista_pesticidi" style="margin-top:2rem"></ul>
+                <ul id="lista_fertilizzanti" style="margin-top:2rem"></ul> -->
                 </div>`);
                 
         }
@@ -429,6 +456,7 @@ function insert(table) {
 }
 
 function insertProduct(table) {
+    let materie_prime = [], lavorazioni = []; 
     $('#div_materie_prime input:checked').each((index, elem) => {
         let mat = elem.value.split("-");
         materie_prime.push({nome_materia_prima: mat[0], luogo_materia_prima: mat[1]});
@@ -437,25 +465,35 @@ function insertProduct(table) {
         let lavorazione =  elem.value;
         lavorazioni.push({procedura_lavorazione:lavorazione[0]});
     })
-    console.log(obj)
     obj.content['materie_prime'] = materie_prime;
     obj.content['lavorazioni'] = lavorazioni;
-    clear();
 }
 
 function insertRaw(table) {
+    let mangimi = [], sostanze = [];
+    $('#div_mangimi input:checked').each((index, elem) => {
+        let mangime =  elem.value;
+        let quantita = $(`#quantita_m${index}`).val();
+        mangimi.push({nome: mangime, quantita: quantita});
+    })
+
+    $('#div_sostanze input:checked').each((index, elem) => {
+        let sostanza =  elem.value;
+        let quantita = $(`#quantita_s${index}`).val();
+        sostanze.push({nome: sostanza, quantita: quantita});
+    })
+
     if(obj.content['tipologia'] == 'animale')
         obj.content['mangimi'] = mangimi;
-    else {
-        obj.content['fertilizzanti'] = fertilizzanti;
-        obj.content['pesticidi'] = pesticidi;
-    }
+    else 
+        obj.content['sostanze'] = sostanze;
 }
 
 function insertElement(event) {
     event.preventDefault();
     let table = $('#tables').val();
     insert(table);
+    
     switch (table) {
         case "prodotto":
             insertProduct(table);
@@ -482,7 +520,6 @@ function insertElement(event) {
     }); 
 
     $('#form')[0].reset();
-    clear();
 
     /* Update table in case the user is watching one that he just inserted into */
     getTable();
@@ -494,6 +531,7 @@ function insertElement(event) {
 $(document).on('change','#tipologia', () =>{
     this.changeTypeMP();
 });
+/*
 
 $(document).on('submit','#form_mangimi',  (event) =>{
     event.preventDefault();
@@ -564,3 +602,5 @@ $(document).on('submit','#form_lavorazione', (event) =>{
     })
     $('#form_lavorazione')[0].reset();
 });
+
+*/

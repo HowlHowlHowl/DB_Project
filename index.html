@@ -69,10 +69,10 @@
 			</div>
 			<div id="parameters">
 				<div id="info" style="display:none">
-					<input id="insertBtn" type="submit" value="Inserisci elemento" onclick="insertElement(event)" style="float:right">
+					<button id="insertBtn" type="submit" form="form" style="float:right">Inserisci elemento</button>
 					<p style="font-weight: bold;">Campi di inserimento</p>
 				</div>
-				<form id="form" action=""></form>
+				<form id="form" onsubmit="insertElement(event)"></form>
 			</div>
 		</div>
 		<div style="width:50%; height: 100%; float:right; padding: 2rem">
