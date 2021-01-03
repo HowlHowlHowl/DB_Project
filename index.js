@@ -216,6 +216,10 @@ function changeForm() {
                         <label for="luogo_materia_prima">Luogo</label>
                         <input type="text" class="form-control" id="luogo_materia_prima" placeholder="" required>
                     </div>
+                    <div class="form-group">
+                        <label for="quantita">Quantità</label>
+                        <input type="text" class="form-control" id="quantita" placeholder="" required>
+                    </div>
                     <input type="submit" value="Aggiungi">
                 </form>
                 <ul id="lista_materie_prime" style="margin-top:2rem"></ul>
