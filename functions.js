@@ -76,21 +76,10 @@ function ins_matprima(mat,db,res){
 	//if exists some relationships with 'fertilizzante' and 'pesticida'
 	if(mat.tipologia === 'vegetale'){
 		db.serialize(()=>{
-			if(mat.fertilizzanti){
-				mat.fertilizzanti.forEach(fert => {
+			if(mat.sostanze){
+				mat.sostanze.forEach(sostanza => {
 					db.run(`INSERT INTO utilizzo (nome_materia_prima, luogo_materia_prima, sostanza, quantita)
-						VALUES(?,?,?,?)`,[mat.nome,mat.luogo,fert.nome,fert.quantita],(err)=> {
-						if (err) {
-							console.log(err);
-							res.status(500).end();
-						}
-					})
-				});
-			}
-			if(mat.pesticidi){
-				mat.pesticidi.forEach(pest => {
-					db.run(`INSERT INTO utilizzo (nome_materia_prima, luogo_materia_prima, sostanza, quantita)
-						VALUES(?,?,?,?)`,[mat.nome,mat.luogo,pest.nome,pest.quantita],(err)=> {
+						VALUES(?,?,?,?)`,[mat.nome,mat.luogo,sostanza.nome,sostanza.quantita],(err)=> {
 						if (err) {
 							console.log(err);
 							res.status(500).end();
