@@ -104,6 +104,28 @@ function fillSelect(table) {
                 })
             }
         });
+
+        $.get('/table/materia_prima', function( data ) {
+            if(data.length > 0) {
+                $('#materie_prime').html("");
+                data.forEach((element, index) => {
+                    $('#materie_prime').append(`
+                    <input type="checkbox" id="mat${index}" value="${element['nome']}-${element['luogo']}">
+                    <label for="mat${index}"> ${element['nome']} - ${element['luogo']}</label><br>`);
+                })
+            }
+        });
+
+        $.get('/table/procedura_lavorazione', function( data ) {
+            if(data.length > 0) {
+                $('#lavorazioni').html("");
+                data.forEach((element, index) => {
+                    $('#lavorazioni').append(`
+                    <input type="checkbox" id="lavorazione${index}" value="${element['tipo']}">
+                    <label for="lavorazione${index}"> ${element['tipo']}</label><br>`);
+                })
+            }
+        });
     }
     else if(table == 'materia_prima') {
         $.get('/table/fornitore', function( data ) {
@@ -122,6 +144,7 @@ function changeForm() {
     let table = $('#tables').val();
     $('#info').show();
     $('#db_error').hide();
+
     /* remove additional forms */
     $('#div_mangimi').remove();
     $('#div_fertilizzanti').remove();
@@ -206,8 +229,11 @@ function changeForm() {
     
             $('#parameters').append(`
             <div id="div_materie_prime" style="background-color: #2b3d4a;padding: 2rem;">
-                <form id="form_materie_prime">
-                    <p> Aggiungi le materie prime che compongono il prodotto </p>
+                <p style="font-weight:bold"> Seleziona le materie prime che compongono il prodotto </p>
+                <div id="materie_prime">
+                <p> Nessuna materia prima disponibile </p>
+                </div>
+               <!-- <form id="form_materie_prime">
                     <div class="form-group">
                         <label for="nome_materia_prima">Nome</label>
                         <input type="text" class="form-control" id="nome_materia_prima" placeholder="" required>
@@ -216,15 +242,19 @@ function changeForm() {
                         <label for="luogo_materia_prima">Luogo</label>
                         <input type="text" class="form-control" id="luogo_materia_prima" placeholder="" required>
                     </div>
-                    <input type="submit" value="Aggiungi">
+                    <input type="submit" value="Aggiungi"> 
                 </form>
-                <ul id="lista_materie_prime" style="margin-top:2rem"></ul>
+                <ul id="lista_materie_prime" style="margin-top:2rem"></ul> -->
             </div>`);
             
     
             $('#parameters').append(`
             <div id="div_lavorazione" style="background-color: #2b3d4a;padding: 2rem;">
-                <form id="form_lavorazione">
+                <p style="font-weight:bold"> Seleziona le lavorazioni necessarie alla produzione </p>
+                <div id="lavorazioni">
+                <p> Nessuna lavorazione disponibile </p>
+                </div>
+         <!--       <form id="form_lavorazione">
                     <p> Aggiungi le lavorazioni del prodotto </p>
                     <div class="form-group">
                         <label for="nome_lavorazione">Nome</label>
@@ -232,7 +262,7 @@ function changeForm() {
                     </div>
                     <input type="submit" value="Aggiungi">
                 </form>
-                <ul id="lista_lavorazioni" style="margin-top:2rem"></ul>
+                <ul id="lista_lavorazioni" style="margin-top:2rem"></ul> -->
             </div>`);
         }
         else if(table == 'materia_prima') {
@@ -399,8 +429,18 @@ function insert(table) {
 }
 
 function insertProduct(table) {
+    $('#div_materie_prime input:checked').each((index, elem) => {
+        let mat = elem.value.split("-");
+        materie_prime.push({nome_materia_prima: mat[0], luogo_materia_prima: mat[1]});
+    })
+    $('#div_lavorazione input:checked').each((index, elem) => {
+        let lavorazione =  elem.value;
+        lavorazioni.push({procedura_lavorazione:lavorazione[0]});
+    })
+    console.log(obj)
     obj.content['materie_prime'] = materie_prime;
     obj.content['lavorazioni'] = lavorazioni;
+    clear();
 }
 
 function insertRaw(table) {
@@ -439,7 +479,7 @@ function insertElement(event) {
             console.log("error",e);
             $('#db_error').show();
         }
-    });
+    }); 
 
     $('#form')[0].reset();
     clear();
