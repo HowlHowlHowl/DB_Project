@@ -1,8 +1,3 @@
-/*var fertilizzanti = [];
-var pesticidi = [];
-var mangimi = [];
-var materie_prime = [];
-var lavorazioni = []; */
 let already_ins = false;
 var obj = {content: {}};
 
@@ -52,11 +47,6 @@ function displayTable(data) {
     $('#display').html(db_table)
 }
 
-/* 
-function clear() {
-    fertilizzanti = []; pesticidi = []; mangimi = [];
-    materie_prime = []; lavorazioni = [];
-} */
 
 function changeTypeMP() {
     let type_mp = $('#tipologia').val();
@@ -214,8 +204,8 @@ function changeForm() {
                     <input type="text" class="form-control" id="nome" placeholder="Mozzarella">
                 </div>
                 <div class="form-group">
-                    <label for="peso">Peso (g)</label>
-                    <input type="text" class="form-control" id="peso" placeholder="200" required>
+                    <label for="peso">Peso (kg)</label>
+                    <input type="text" class="form-control" id="peso" placeholder="0.2" required>
                 </div>
                 <div class="form-group">	
                     <label for="data">Data</label>	
@@ -237,7 +227,7 @@ function changeForm() {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="CO2_trasporto">Quantità di CO2 emessa per tonnellata-km (g/tkm)</label>
+                    <label for="CO2_trasporto">Quantità di CO2 emessa per tonnellata-km (kg/tkm)</label>
                     <input type="text" class="form-control" id="CO2_trasporto" placeholder="70" required>
                 </div>
                 <div class="form-group">
@@ -291,15 +281,6 @@ function changeForm() {
                 <div id="lavorazioni">
                 <p> Nessuna lavorazione disponibile </p>
                 </div>
-         <!--       <form id="form_lavorazione">
-                    <p> Aggiungi le lavorazioni del prodotto </p>
-                    <div class="form-group">
-                        <label for="nome_lavorazione">Nome</label>
-                        <input type="text" class="form-control" id="nome_lavorazione" placeholder="" >
-                    </div>
-                    <input type="submit" value="Aggiungi">
-                </form>
-                <ul id="lista_lavorazioni" style="margin-top:2rem"></ul> -->
             </div>`);
         }
         else if(table == 'materia_prima') {
@@ -320,15 +301,15 @@ function changeForm() {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="qTerra">Superficie di terreno utilizzata (m<sup>2</sup>)</label>
+                    <label for="qTerra">Superficie di terreno utilizzata (m<sup>2</sup>/kg)</label>
                     <input type="text" class="form-control" id="qTerra" placeholder="" required>
                 </div>
                 <div class="form-group">
-                    <label for="qAcqua">Quantità di acqua (m<sup>3</sup>)</label>
+                    <label for="qAcqua">Quantità di acqua (m<sup>3</sup>/kg)</label>
                     <input type="text" class="form-control" id="qAcqua" placeholder="" required>
                 </div>
                 <div class="form-group">
-                    <label for="CO2">Quantità di gas serra prodotta (CO2 eq.)</label>
+                    <label for="CO2">Quantità di gas serra prodotta (Kg CO2 eq.)</label>
                     <input type="text" class="form-control" id="CO2" placeholder="" required>
                 </div>
                 <div class="form-group">
@@ -344,19 +325,6 @@ function changeForm() {
                         <div id="mangimi">
                         <p> Nessuna mangime disponibile </p>
                         </div>
-               <!--     <form id="form_mangimi">
-                        <p> Aggiungi i mangimi utilizzati per la materia prima inserita </p>
-                        <div class="form-group">
-                            <label for="mangime">Nome</label>
-                            <input type="text" class="form-control" id="mangime" placeholder="">
-                        </div>
-                        <div class="form-group">
-                            <label for="quantita">Quantità di mangime utilizzata</label>
-                            <input type="text" class="form-control" id="quantita" placeholder="">
-                        </div>
-                        <input type="submit" value="Aggiungi">
-                    </form>
-                    <ul id="lista_mangimi" style="margin-top:2rem"></ul> -->
                     </div>`);
 
                 $('#parameters').append(`
@@ -365,19 +333,6 @@ function changeForm() {
                     <div id="sostanze">
                     <p> Nessuna sostanza disponibile </p>
                     </div>
-           <!--     <form id="form_fertilizzanti">
-                    <p> Aggiungi i fertilizzanti utilizzati per la materia prima inserita </p>
-                    <div class="form-group">
-                        <label for="fertilizzante">Nome</label>
-                        <input type="text" class="form-control" id="fertilizzante" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="quantita_fert">Quantità di fertilizzante utilizzata</label>
-                        <input type="text" class="form-control" id="quantita_fert" placeholder="">
-                    </div>
-                    <input type="submit" value="Aggiungi">
-                </form>
-                <ul id="lista_fertilizzanti" style="margin-top:2rem"></ul> -->
                 </div>`);
                 
         }
@@ -399,8 +354,8 @@ function changeForm() {
                     <input type="text" class="form-control" id="volume" placeholder="20">
                 </div>
                 <div class="form-group">
-                    <label for="peso">Peso del package (g)</label>
-                    <input type="text" class="form-control" id="peso" placeholder="20">
+                    <label for="peso">Peso del package (kg)</label>
+                    <input type="text" class="form-control" id="peso" placeholder="0.05">
                 </div>`);
         }
         else if(table == 'procedura_lavorazione') {
@@ -409,11 +364,11 @@ function changeForm() {
                 <input type="text" class="form-control" id="tipo" placeholder="" required>
                 </div>
                 <div class="form-group">
-                    <label for="CO2">Quantità di gas serra prodotta (CO2 eq.)</label>
+                    <label for="CO2">Quantità di gas serra prodotta (kg CO2 eq.)</label>
                     <input type="text" class="form-control" id="CO2" placeholder="" required>
                 </div>
                 <div class="form-group">
-                    <label for="qAcqua">Quantità di acqua</label>
+                    <label for="qAcqua">Quantità di acqua (m<sup>3</sup>/kg)</label>
                     <input type="text" class="form-control" id="qAcqua" placeholder="">
                 </div>`);
         }
@@ -423,11 +378,11 @@ function changeForm() {
                 <input type="text" class="form-control" id="nome" placeholder="" required>
                 </div>
                 <div class="form-group">
-                    <label for="acidificazione">Valore di acidificazione</label>
+                    <label for="acidificazione">Valore di acidificazione (kg SO<sub>2</sub>eq)</label>
                     <input type="text" class="form-control" id="acidificazione" placeholder="" required>
                 </div>
                 <div class="form-group">
-                    <label for="eutrofizzazione">Valore di eutrofizzazione</label>
+                    <label for="eutrofizzazione">Valore di eutrofizzazione (kg PO<sub>4</sub><sup>3-</sup>eq)</label>
                     <input type="text" class="form-control" id="eutrofizzazione" placeholder="" required>
                 </div>`);
         }
@@ -529,81 +484,6 @@ function insertElement(event) {
 }
 
 
-/**** */
-
 $(document).on('change','#tipologia', () =>{
     this.changeTypeMP();
 });
-/*
-
-$(document).on('submit','#form_mangimi',  (event) =>{
-    event.preventDefault();
-    
-    if($('#mangime').val() && $('#quantita').val())
-        mangimi.push({nome: $('#mangime').val(), quantita: $('#quantita').val()});
-
-    $("#lista_mangimi").html("");
-    mangimi.forEach( (item) => {
-        $("#lista_mangimi").append(`<li> ${item.mangime} ${item.quantita}</li>`)
-    })
-    $('#form_mangimi')[0].reset();
-});
-
-$(document).on('submit','#form_fertilizzanti', (event) =>{
-    event.preventDefault();
-    
-    if($('#fertilizzante').val() && $('#quantita_fert').val())
-        fertilizzanti.push({nome: $('#fertilizzante').val(), quantita: $('#quantita_fert').val()});
-    
-    $("#lista_fertilizzanti").html("");
-    fertilizzanti.forEach( (item) => {
-        $("#lista_fertilizzanti").append(`<li> ${item.nome} ${item.quantita}</li>`)
-    })
-    $('#form_fertilizzanti')[0].reset();
-});
-
-$(document).on('submit','#form_pesticidi', (event) =>{
-    event.preventDefault();
-
-    if($('#pesticida').val() && $('#quantita_pesticida').val())
-        pesticidi.push({nome: $('#pesticida').val(), quantita: $('#quantita_pesticida').val()});
-    
-    $("#lista_pesticidi").html("");
-    pesticidi.forEach( (item) => {
-        $("#lista_pesticidi").append(`<li> ${item.nome} ${item.quantita}</li>`)
-    })
-    $('#form_pesticidi')[0].reset();
-});
-
-$(document).on('submit','#form_materie_prime', (event) =>{
-    event.preventDefault();
-    //remove required attribute when at least one object inserted
-    if(!already_ins){
-        already_ins = true;
-        $('#nome_materia_prima, #luogo_materia_prima').removeAttr('required');
-    }
-
-    if($('#nome_materia_prima').val() && $('#luogo_materia_prima').val())
-        materie_prime.push({nome_materia_prima: $('#nome_materia_prima').val(), luogo_materia_prima: $('#luogo_materia_prima').val()});
-
-    $("#lista_materie_prime").html("");
-    materie_prime.forEach( (item) => {
-        $("#lista_materie_prime").append(`<li> ${item.nome_materia_prima} ${item.luogo_materia_prima}</li>`)
-    })
-    $('#form_materie_prime')[0].reset();
-});
-
-$(document).on('submit','#form_lavorazione', (event) =>{
-    event.preventDefault();
-    
-    if($('#nome_lavorazione').val())
-        lavorazioni.push({procedura_lavorazione: $('#nome_lavorazione').val()});
-    
-    $("#lista_lavorazioni").html("");
-    lavorazioni.forEach( (item) => {
-        $("#lista_lavorazioni").append(`<li> ${item.procedura_lavorazione}</li>`)
-    })
-    $('#form_lavorazione')[0].reset();
-});
-
-*/

@@ -58,7 +58,7 @@
 						<option value="fornitore">Fornitore</option>
 						<option value="azienda_trasporti">Azienda di Trasporti</option>
 						<option value="prodotto">Prodotto</option>
-						<option value="package">Package</option>
+						<option value="package">Imballaggio</option>
 						<option value="procedura_lavorazione">Procedura di Lavorazione</option>
 						<option value="materia_prima">Materia Prima</option>
 						<option value="fertilizzante">Fertilizzante</option>
@@ -68,7 +68,7 @@
 			</div>
 			<div id="parameters">
 				<div id="info" style="display:none">
-					<button id="insertBtn" type="submit" form="form" style="float:right">Inserisci elemento</button>
+					<button id="insertBtn" type="submit" form="form" style="float:right;border-radius: 3px;border: 1px solid white;box-shadow: 0 0 7px 0px white;">Inserisci elemento</button>
 					<p style="font-weight: bold;">Campi di inserimento</p>
 				</div>
 				<form id="form" onsubmit="insertElement(event)"></form>
@@ -79,19 +79,19 @@
 			<select id="selTable" onchange="getTable()">
 				<option value="-">---</option>
 				<optgroup route="table" label="Tabelle">
-					<option value="produttore">Produttore</option>
-					<option value="fornitore">Fornitore</option>
-					<option value="azienda_trasporti">Azienda di Trasporti</option>
-					<option value="prodotto">Prodotto</option>
-					<option value="package">Package</option>
-					<option value="procedura_lavorazione">Procedura di Lavorazione</option>
-					<option value="materia_prima">Materia Prima</option>
-					<option value="sostanza">Sostanza</option>
-					<option value="mangime">Mangime</option>
-					<option value="lavorazione">Lavorazione</option>
-					<option value="composizione">Composizione</option>
-					<option value="utilizzo">Sostanza utilizzata</option>
-					<option value="alimentazione">Alimentazione</option>
+					<option value="produttore">Produttori</option>
+					<option value="fornitore">Fornitori</option>
+					<option value="azienda_trasporti">Aziende di Trasporti</option>
+					<option value="prodotto">Prodotti</option>
+					<option value="package">Imballaggi</option>
+					<option value="procedura_lavorazione">Procedure di Lavorazione</option>
+					<option value="materia_prima">Materie Prime</option>
+					<option value="sostanza">Fertilizzanti/Pesticidi</option>
+					<option value="mangime">Mangimi</option>
+					<option value="lavorazione">Lavorazioni</option>
+					<option value="composizione">Composizioni</option>
+					<option value="utilizzo">Sostanze utilizzate</option>
+					<option value="alimentazione">Alimentazioni</option>
 				</optgroup>
 				<optgroup route="query" label="Visualizza">
 					<option value="9">CO2 e acqua prodotti</option>
