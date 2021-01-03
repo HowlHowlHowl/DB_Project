@@ -336,7 +336,7 @@ function changeForm() {
                     <input type="text" class="form-control" id="materiale" placeholder="Cartone">
                 </div>
                 <div class="form-group">
-                    <label for="volume">Volume occupato (dm<sup>3</sup>)</label>
+                    <label for="volume">Volume occupato (cm<sup>3</sup>)</label>
                     <input type="text" class="form-control" id="volume" placeholder="20">
                 </div>
                 <div class="form-group">
