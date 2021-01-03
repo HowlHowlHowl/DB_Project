@@ -151,6 +151,7 @@ function changeForm() {
                 </div>`);
         }
         else if(table == 'prodotto') {
+            let today =  new Date(); 
             $('#form').html(`<div class="form-group">
                 <label for="EAN">Codice EAN</label>
                 <input type="text" class="form-control" id="EAN" placeholder="2412345678901" required>
@@ -162,6 +163,10 @@ function changeForm() {
                 <div class="form-group">
                     <label for="peso">Peso (g)</label>
                     <input type="text" class="form-control" id="peso" placeholder="200" required>
+                </div>
+                <div class="form-group">	
+                    <label for="data">Data</label>	
+                    <input type="text" class="form-control" id="data" placeholder="30/12/2020">	
                 </div>
                 <div class="form-group">
                     <label for="azienda_trasporti">Azienda di trasporto</label>
@@ -199,7 +204,9 @@ function changeForm() {
                     </select>
                 </div>
             `);
-    
+            $('#data').val(String(today.getDate()).padStart(2, '0') + 
+                    '/' + String(today.getMonth() + 1).padStart(2, '0') + 
+                    '/' + String(today.getFullYear()));
             $('#parameters').append(`
             <div id="div_materie_prime" style="background-color: #2b3d4a;padding: 2rem;">
                 <form id="form_materie_prime">
@@ -401,9 +408,6 @@ function insert(table) {
 function insertProduct(table) {
     obj.content['materie_prime'] = materie_prime;
     obj.content['lavorazioni'] = lavorazioni;
-    
-    let today =  new Date();
-    obj.content['data'] = today.getDay() + '/' + today.getMonth() + '/' + today.getFullYear(); 
 }
 
 function insertRaw(table) {
