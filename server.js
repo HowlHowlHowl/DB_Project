@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let ins_functions = require('./functions').insert_functions;
 
 //open or create the db file
-let db = new sqlite3.Database(path.join(__dirname,'db/db_completo.db'),(err) => {
+let db = new sqlite3.Database(path.join(__dirname,'db/database.db'),(err) => {
 	if (err) {
     		console.log(err,__dirname);
   	}
@@ -102,12 +102,13 @@ function query10(res) {
 
 function query11(res) {
 	db.all(`
-		select EAN, 
+		select p.EAN as 'EAN', 
 			   nome as 'Nome', 
-			   valore_di_impatto as 'Valore di impatto', 
-			   data as 'Data'
-		from prodotto
-		where data > date('now', '-1 year')
+			   k.tipo as 'Tipo package',
+			   k.materiale as 'Materiale package',
+			   k.volume as 'Volume package (cm3)',
+			   k.peso as 'Peso package (kg)'
+		from prodotto as p join package as k on p.package = k.codice
 	`, (err, rows) => return_rows(res, err, rows));
 }
 
@@ -115,8 +116,8 @@ function query12(res) {
 	db.all(`
 		select u.nome_materia_prima as 'Nome', 
 		       u.luogo_materia_prima as 'Luogo', 
-			   sum(s.acidificazione * u.quantita) as 'Totale Acidificazione (kg SO2 eq)', 
-			   sum(s.eutrofizzazione * u.quantita) as 'Totale Eutrofizzazione (kg PO4 eq)'
+			   sum(s.acidificazione * u.quantita) as 'Totale Acidificazione per kg (kg SO2 eq)', 
+			   sum(s.eutrofizzazione * u.quantita) as 'Totale Eutrofizzazione per kg (kg PO4 eq)'
 		from utilizzo as u join sostanza as s on u.sostanza = s.nome
 		group by u.nome_materia_prima, u.luogo_materia_prima
 	`, (err, rows) => return_rows(res, err, rows));
