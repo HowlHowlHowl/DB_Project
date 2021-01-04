@@ -228,7 +228,7 @@ function changeForm() {
                             <option value="strada">Su strada</option>
                             <option value="rotaia">Su rotaia</option>
                             <option value="marittimo">Marittimo</option>
-                            <option value="areo">Aereo</option>
+                            <option value="aereo">Aereo</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -397,7 +397,6 @@ function insert(table) {
     $('#form input[type="text"], #form select').each((index, elem) => {
         obj.content[elem.id] = elem.value;
     });
-
 }
 
 function insertProduct(table) {
@@ -475,6 +474,7 @@ function insertElement(event) {
                     '/' + String(today.getMonth() + 1).padStart(2, '0') + 
                     '/' + String(today.getFullYear()));
     }
+
     /* Update table in case the user is watching one that he just inserted into */
     getTable();
 }
