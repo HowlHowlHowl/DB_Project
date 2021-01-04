@@ -22,6 +22,7 @@ function getTable() {
         }
     });
 }
+
 function displayTable(data) {
     let db_table = document.createElement('table');
     let header = '';
@@ -38,7 +39,12 @@ function displayTable(data) {
         let tr = document.createElement('tr');
         let row = '';
         Object.keys(element).forEach((key) => {
-            row += '<td>' + element[key] + '</td>';
+            if(!isNaN(Number(element[key]))  && element[key].toString().indexOf('.') != -1) {
+                row += '<td>' +  Number(element[key]).toExponential(3) + '</td>';
+            } else {    
+                row += '<td>' + element[key] + '</td>';
+            }
+
         });
         tr.innerHTML = row;
         tbody.appendChild(tr);
@@ -46,7 +52,6 @@ function displayTable(data) {
     db_table.appendChild(tbody);
     $('#display').html(db_table)
 }
-
 
 function changeTypeMP() {
     let type_mp = $('#tipologia').val();
@@ -259,7 +264,7 @@ function changeForm() {
             </div>`);
             
     
-            $('#parameters').append(`
+            $('#form').append(`
             <div id="div_lavorazione" style="margin-top: 2rem;">
                 <p style="font-weight:bold"> Seleziona le lavorazioni necessarie alla produzione </p>
                 <div id="lavorazioni">
@@ -303,7 +308,7 @@ function changeForm() {
                     </select>
                 </div>`);
 
-                $('#parameters').append(`
+                $('#form').append(`
                     <div id="div_mangimi" style="margin-top: 2rem;" >
                         <p style="font-weight:bold"> Seleziona i mangimi utlizzati e specificane la quantità utilizzata(kg)</p>
                         <div id="mangimi">
@@ -311,7 +316,7 @@ function changeForm() {
                         </div>
                     </div>`);
 
-                $('#parameters').append(`
+                $('#form').append(`
                 <div id="div_sostanze" style="margin-top: 2rem; display: none">
                     <p style="font-weight:bold"> Seleziona i fertilizzanti/pesticidi e specificane la quantità utilizzata(kg)</p>
                     <div id="sostanze">
@@ -382,9 +387,7 @@ function changeForm() {
         }
 
         fillSelect(table);
-
     }
-   
 }
 
 /* code for insertions */
@@ -392,15 +395,19 @@ function changeForm() {
 function insert(table) {
     obj.content['table'] = table;
     $('#form input[type="text"], #form select').each((index, elem) => {
+        if(elem.id.startsWith('quantita'));
         obj.content[elem.id] = elem.value;
     });
 }
 
 function insertProduct(table) {
     let materie_prime = [], lavorazioni = []; 
-    $('#div_materie_prime input:checked').each((index, elem) => {
-        let mat = elem.value.split("-");
-        materie_prime.push({nome_materia_prima: mat[0], luogo_materia_prima: mat[1]});
+
+    $('#div_materie_prime input[type="checkbox"]').each((index, elem) => {
+        if(elem.checked) {
+            let mat = elem.value.split("-");
+            materie_prime.push({nome_materia_prima: mat[0], luogo_materia_prima: mat[1], quantita: $(`#quantita${index}`).val()});
+        }
     })
     $('#div_lavorazione input:checked').each((index, elem) => {
         let lavorazione =  elem.value;

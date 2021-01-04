@@ -56,17 +56,17 @@
 			<div style=" padding-bottom: 2rem;">
 				<label for="tables" style="font-weight: 900;">Seleziona tabella</label>
 				<select id="tables" onchange="changeForm()">
-					<option value="-">---</option>
-						<option value="produttore">Produttore</option>
-						<option value="fornitore">Fornitore</option>
-						<option value="azienda_trasporti">Azienda di Trasporti</option>
-						<option value="prodotto">Prodotto</option>
-						<option value="package">Package</option>
-						<option value="procedura_lavorazione">Procedura di Lavorazione</option>
-						<option value="materia_prima">Materia Prima</option>
-						<option value="fertilizzante">Fertilizzante</option>
-						<option value="pesticida">Pesticida</option>
-						<option value="mangime">Mangime</option>
+					<option value="">---</option>
+					<option value="produttore">Produttore</option>
+					<option value="fornitore">Fornitore</option>
+					<option value="azienda_trasporti">Azienda di Trasporti</option>
+					<option value="prodotto">Prodotto</option>
+					<option value="package">Package</option>
+					<option value="procedura_lavorazione">Procedura di Lavorazione</option>
+					<option value="materia_prima">Materia Prima</option>
+					<option value="fertilizzante">Fertilizzante</option>
+					<option value="pesticida">Pesticida</option>
+					<option value="mangime">Mangime</option>
 				</select>
 			</div>
 			<span id="db_error" style="color: red;">La richiesta non è andata a buon fine, prova di nuovo</span>
@@ -81,7 +81,7 @@
 		<div style="width:50%; min-height: 100%; float:right; padding: 2rem">
 			<label for="selTable"  style="font-weight: 900;">Visualizza tabella</label>
 			<select id="selTable" onchange="getTable()">
-				<option value="-">---</option>
+				<option value="">---</option>
 				<optgroup route="table" label="Tabelle">
 					<option value="produttore">Produttori</option>
 					<option value="fornitore">Fornitori</option>
