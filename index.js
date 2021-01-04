@@ -223,7 +223,7 @@ function changeForm() {
                             <option value="strada">Su strada</option>
                             <option value="rotaia">Su rotaia</option>
                             <option value="marittimo">Marittimo</option>
-                            <option value="areo">Aereo</option>
+                            <option value="aereo">Aereo</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -394,7 +394,6 @@ function insert(table) {
     $('#form input[type="text"], #form select').each((index, elem) => {
         obj.content[elem.id] = elem.value;
     });
-
 }
 
 function insertProduct(table) {

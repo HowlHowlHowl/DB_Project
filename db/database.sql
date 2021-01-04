@@ -29,6 +29,7 @@ CREATE TABLE prodotto(
 	FOREIGN KEY(package) REFERENCES package(codice),
 	FOREIGN KEY(produttore) REFERENCES produttore(partita_iva),
 	CHECK(peso>0)
+	CHECK(tipo_trasporto = 'marittimo' or tipo_trasporto = 'strada' or tipo_trasporto = 'rotaia' or tipo_trasporto = 'aereo')
 );
 CREATE TABLE package(
 	codice INT NOT NULL PRIMARY KEY,
