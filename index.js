@@ -101,7 +101,7 @@ function fillSelect(table) {
                         <label for="mat${index}"> ${element['nome']} - ${element['luogo']}</label>
                     </div>
                     <div style="width: 20%;display: flex; margin-bottom: 1rem;">
-                        <input type="text" class="form-control" id="quantita${index}" placeholder="20">
+                        <input type="text" class="form-control" id="quantita${index}" placeholder="0.2">
                     </div>`);
                 })
             }
@@ -227,8 +227,8 @@ function changeForm() {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="CO2_trasporto">Quantità di CO2 emessa per tonnellata-km (kg/tkm)</label>
-                    <input type="text" class="form-control" id="CO2_trasporto" placeholder="70" required>
+                    <label for="CO2">Quantità di CO2 emessa per tonnellata-km (kg/tkm)</label>
+                    <input type="text" class="form-control" id="CO2" placeholder="0.2" required>
                 </div>
                 <div class="form-group">
                     <label for="tratta_trasporto">Tratta media del trasporto (km)</label>
@@ -252,26 +252,10 @@ function changeForm() {
                     '/' + String(today.getFullYear()));
             $('#form').append(`
             <div id="div_materie_prime" style="margin-top: 2rem;">
-                <p style="font-weight:bold"> Seleziona le materie prime che compongono il prodotto </p>
+                <p style="font-weight:bold"> Seleziona le materie prime che compongono il prodotto e specificane la quantità utilizzata (kg)</p>
                 <div id="materie_prime">
                 <p> Nessuna materia prima disponibile </p>
                 </div>
-               <!-- <form id="form_materie_prime">
-                    <div class="form-group">
-                        <label for="nome_materia_prima">Nome</label>
-                        <input type="text" class="form-control" id="nome_materia_prima" placeholder="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="luogo_materia_prima">Luogo</label>
-                        <input type="text" class="form-control" id="luogo_materia_prima" placeholder="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="quantita">Quantità</label>
-                        <input type="text" class="form-control" id="quantita" placeholder="" required>
-                    </div>
-                    <input type="submit" value="Aggiungi">
-                </form>
-                <ul id="lista_materie_prime" style="margin-top:2rem"></ul> -->
             </div>`);
             
     
@@ -421,7 +405,7 @@ function insertProduct(table) {
     })
     $('#div_lavorazione input:checked').each((index, elem) => {
         let lavorazione =  elem.value;
-        lavorazioni.push({procedura_lavorazione:lavorazione[0]});
+        lavorazioni.push({procedura_lavorazione:lavorazione});
     })
     obj.content['materie_prime'] = materie_prime;
     obj.content['lavorazioni'] = lavorazioni;
@@ -429,16 +413,20 @@ function insertProduct(table) {
 
 function insertRaw(table) {
     let mangimi = [], sostanze = [];
-    $('#div_mangimi input:checked').each((index, elem) => {
-        let mangime =  elem.value;
-        let quantita = $(`#quantita_m${index}`).val();
-        mangimi.push({nome: mangime, quantita: quantita});
+    $('#div_mangimi input[type="checkbox"]').each((index, elem) => {
+        if(elem.checked) {
+            let mangime =  elem.value;
+            let quantita = $(`#quantita_m${index}`).val();
+            mangimi.push({nome: mangime, quantita: quantita});
+        }
     })
 
-    $('#div_sostanze input:checked').each((index, elem) => {
-        let sostanza =  elem.value;
-        let quantita = $(`#quantita_s${index}`).val();
-        sostanze.push({nome: sostanza, quantita: quantita});
+    $('#div_sostanze input[type="checkbox"]').each((index, elem) => {
+        if(elem.checked) {
+            let sostanza =  elem.value;
+            let quantita = $(`#quantita_s${index}`).val();
+            sostanze.push({nome: sostanza, quantita: quantita});
+        }
     })
 
     if(obj.content['tipologia'] == 'animale')

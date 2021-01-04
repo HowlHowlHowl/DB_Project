@@ -14,8 +14,7 @@ function ins_azienda(az,db,res){
 
 function ins_prod(prod,db,res){
 	//add info
-	prod['CO2'] = 0.4;
-	prod['valore_di_impatto'] = 10;
+	prod['valore_di_impatto'] = 0;
 
 	//to avoid parallel execution
 	db.serialize(()=>{
