@@ -48,7 +48,6 @@ app.post('/insertData', (req,res) =>{
 		case 'mangime': ins_functions.ins_mangime(el,db,res); break;
 		default: res.status(400).end(); console.log("Tabella inesistente");
 	}
-	res.status(200).end();
 })
 
 
@@ -82,7 +81,10 @@ app.get('/query/:number', (req, res) => {
 
 function query9(res) {
 	db.all(`
-		select p.EAN, p.nome, sum(pl.CO2) as CO2_totale, sum(pl.qAcqua) as acqua_totale
+		select p.EAN, 
+			   p.nome as 'Nome', 
+			   sum(pl.CO2) as 'CO2 Totale (kg)', 
+			   sum(pl.qAcqua) as 'Acqua totale (m3)'
 		from (prodotto as p join lavorazione as l on p.EAN = l.prodotto)
 			join procedura_lavorazione as pl on l.procedura_lavorazione = pl.tipo
 		group by p.EAN
@@ -91,14 +93,19 @@ function query9(res) {
 
 function query10(res) {
 	db.all(`
-		select EAN, nome, valore_di_impatto 
+		select EAN, 
+			   nome as 'Nome', 
+			   valore_di_impatto as 'Valore di impatto'
 		from prodotto
 	`, (err, rows) => return_rows(res, err, rows));
 }
 
 function query11(res) {
 	db.all(`
-		select EAN, nome, valore_di_impatto, data
+		select EAN, 
+			   nome as 'Nome', 
+			   valore_di_impatto as 'Valore di impatto', 
+			   data as 'Data'
 		from prodotto
 		where data > date('now', '-1 year')
 	`, (err, rows) => return_rows(res, err, rows));
@@ -108,8 +115,8 @@ function query12(res) {
 	db.all(`
 		select u.nome_materia_prima as 'Nome', 
 		       u.luogo_materia_prima as 'Luogo', 
-			   sum(s.acidificazione * u.quantita) as 'Totale Acidificazione', 
-			   sum(s.eutrofizzazione * u.quantita) as 'Totale Eutrofizzazione'
+			   sum(s.acidificazione * u.quantita) as 'Totale Acidificazione (kg SO2 eq)', 
+			   sum(s.eutrofizzazione * u.quantita) as 'Totale Eutrofizzazione (kg PO4 eq)'
 		from utilizzo as u join sostanza as s on u.sostanza = s.nome
 		group by u.nome_materia_prima, u.luogo_materia_prima
 	`, (err, rows) => return_rows(res, err, rows));
@@ -117,7 +124,10 @@ function query12(res) {
 
 function query13(res) {
 	db.all(`
-		select a.nome_materia_prima, a.luogo_materia_prima, a.quantita, m.componente
+		select a.nome_materia_prima as 'Nome', 
+			   a.luogo_materia_prima as 'Luogo', 
+			   a.quantita as 'Quantità (kg)',
+			   m.componente as 'Componente'
 		from (alimentazione as a join max_alimentazione as maxa 
 			  on a.nome_materia_prima = maxa.nome and a.luogo_materia_prima = maxa.luogo and a.quantita = maxa.quantita) 
 			 join mangime as m on a.mangime = m.nome
@@ -126,7 +136,11 @@ function query13(res) {
 
 function query14(res) {
 	db.all(`
-		select nome, CO2_trasporto, tipo_trasporto, tratta_trasporto
+		select nome as Nome, 
+			   tipo_trasporto as 'Tipo trasporto', 
+			   CO2_trasporto as 'CO2 trasporto (kg/tkm)',
+			   tratta_trasporto as 'Lunghezza tratta (km)',
+			   CO2_trasporto * tratta_trasporto * (peso / 1000.0) as 'CO2 per unità di prodotto (kg)'
 		from prodotto
 	`, (err, rows) => return_rows(res, err, rows));
 }
