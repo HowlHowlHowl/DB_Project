@@ -22,6 +22,7 @@ function getTable() {
         }
     });
 }
+
 function displayTable(data) {
     let db_table = document.createElement('table');
     let header = '';
@@ -38,7 +39,12 @@ function displayTable(data) {
         let tr = document.createElement('tr');
         let row = '';
         Object.keys(element).forEach((key) => {
-            row += '<td>' + element[key] + '</td>';
+            if(!isNaN(Number(element[key]))  && element[key].toString().indexOf('.') != -1) {
+                row += '<td>' +  Number(element[key]).toExponential(3) + '</td>';
+            } else {    
+                row += '<td>' + element[key] + '</td>';
+            }
+
         });
         tr.innerHTML = row;
         tbody.appendChild(tr);
@@ -46,7 +52,6 @@ function displayTable(data) {
     db_table.appendChild(tbody);
     $('#display').html(db_table)
 }
-
 
 function changeTypeMP() {
     let type_mp = $('#tipologia').val();
@@ -382,9 +387,7 @@ function changeForm() {
         }
 
         fillSelect(table);
-
     }
-   
 }
 
 /* code for insertions */
@@ -466,7 +469,12 @@ function insertElement(event) {
     }); 
 
     $('#form')[0].reset();
-
+    if(table === "prodotto"){
+        let today = new Date();
+        $('#data').val(String(today.getDate()).padStart(2, '0') + 
+                    '/' + String(today.getMonth() + 1).padStart(2, '0') + 
+                    '/' + String(today.getFullYear()));
+    }
     /* Update table in case the user is watching one that he just inserted into */
     getTable();
 }
