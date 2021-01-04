@@ -27,7 +27,7 @@ function ins_prod(prod,db,res){
 				}
 		})
 		if(prod.materie_prime) {
-			prod.materie_prime.forEach( (materia,ind) => {
+			prod.materie_prime.forEach( (materia) => {
 				db.run(`INSERT INTO composizione (nome_materia_prima, luogo_materia_prima, prodotto, quantita)
 					VALUES(?,?,?,?)`,[materia.nome_materia_prima,materia.luogo_materia_prima,prod.EAN,materia.quantita],(err)=> {
 					if (err) {

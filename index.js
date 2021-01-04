@@ -16,8 +16,9 @@ function getTable() {
             if(data.length > 0) displayTable(data);
             else $('#display').html(`<p style="margin-top:2rem">Nessun dato da visualizzare</p>`)
         },
-        error: (e) => {
-            console.log(e);
+        error: (xhr) => {
+            console.log("Codice errore:",xhr.status);
+            $('#db_error').text(xhr.responseText);
             $('#db_error').show();
         }
     });
@@ -465,8 +466,9 @@ function insertElement(event) {
         success: (data) =>{
             console.log('ok')
         },
-        error: function (e) {
-            console.log("error",e);
+        error: (xhr) => {
+            console.log("Codice errore:",xhr.status);
+            $('#db_error').text(xhr.responseText);
             $('#db_error').show();
         }
     }); 
