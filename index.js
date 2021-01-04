@@ -280,11 +280,11 @@ function changeForm() {
             $('#form').html(`<div class="form-group">
                 <div class="form-group">
                     <label for="nome">Nome</label>
-                    <input type="text" class="form-control" id="nome" placeholder="" required>
+                    <input type="text" class="form-control" id="nome" placeholder="Grano" required>
                 </div>
                 <div class="form-group">
                     <label for="luogo">Luogo</label>
-                    <input type="text" class="form-control" id="luogo" placeholder="" required>
+                    <input type="text" class="form-control" id="luogo" placeholder="Emilia Romagna" required>
                 </div>
                 <div class="form-group">
                     <label for="tipologia">Tipologia</label>
@@ -295,15 +295,15 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="qTerra">Superficie di terreno utilizzata (m<sup>2</sup>/kg)</label>
-                    <input type="text" class="form-control" id="qTerra" placeholder="" required>
+                    <input type="text" class="form-control" id="qTerra" placeholder="3.85" required>
                 </div>
                 <div class="form-group">
                     <label for="qAcqua">Quantità di acqua (m<sup>3</sup>/kg)</label>
-                    <input type="text" class="form-control" id="qAcqua" placeholder="" required>
+                    <input type="text" class="form-control" id="qAcqua" placeholder="548" required>
                 </div>
                 <div class="form-group">
                     <label for="CO2">Quantità di gas serra prodotta (Kg CO2 eq.)</label>
-                    <input type="text" class="form-control" id="CO2" placeholder="" required>
+                    <input type="text" class="form-control" id="CO2" placeholder="10.3" required>
                 </div>
                 <div class="form-group">
                     <label for="fornitore">Fornitore</label>
@@ -354,29 +354,29 @@ function changeForm() {
         else if(table == 'procedura_lavorazione') {
             $('#form').html(`<div class="form-group">
                 <label for="tipo">Tipologia di lavorazione</label>
-                <input type="text" class="form-control" id="tipo" placeholder="" required>
+                <input type="text" class="form-control" id="tipo" placeholder="Caseificazione" required>
                 </div>
                 <div class="form-group">
                     <label for="CO2">Quantità di gas serra prodotta (kg CO2 eq.)</label>
-                    <input type="text" class="form-control" id="CO2" placeholder="" required>
+                    <input type="text" class="form-control" id="CO2" placeholder="5.4" required>
                 </div>
                 <div class="form-group">
                     <label for="qAcqua">Quantità di acqua (m<sup>3</sup>/kg)</label>
-                    <input type="text" class="form-control" id="qAcqua" placeholder="">
+                    <input type="text" class="form-control" id="qAcqua" placeholder="120">
                 </div>`);
         }
         else if(table == 'fertilizzante' || table == 'pesticida') {
             $('#form').html(`<div class="form-group">
                 <label for="nome">Nome</label>
-                <input type="text" class="form-control" id="nome" placeholder="" required>
+                <input type="text" class="form-control" id="nome" placeholder="SINIS 70 DF" required>
                 </div>
                 <div class="form-group">
                     <label for="acidificazione">Valore di acidificazione (kg SO<sub>2</sub>eq)</label>
-                    <input type="text" class="form-control" id="acidificazione" placeholder="" required>
+                    <input type="text" class="form-control" id="acidificazione" placeholder="0.03" required>
                 </div>
                 <div class="form-group">
                     <label for="eutrofizzazione">Valore di eutrofizzazione (kg PO<sub>4</sub><sup>3-</sup>eq)</label>
-                    <input type="text" class="form-control" id="eutrofizzazione" placeholder="" required>
+                    <input type="text" class="form-control" id="eutrofizzazione" placeholder="0.072" required>
                 </div>`);
         }
         else if(table == 'mangime') {
