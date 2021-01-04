@@ -524,6 +524,9 @@ function add_required_checkbox(index){
 
 window.onload = function() {
     $('#db_error').hide();
+    $('#tables').val("produttore");
+    $('#selTable').val("produttore");
+    changeForm();
+    getTable();
 }
-
 
