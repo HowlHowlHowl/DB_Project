@@ -472,6 +472,7 @@ function insertElement(event) {
                     '/' + String(today.getMonth() + 1).padStart(2, '0') + 
                     '/' + String(today.getFullYear()));
     }
+
     /* Update table in case the user is watching one that he just inserted into */
     getTable();
 }
