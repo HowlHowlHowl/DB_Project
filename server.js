@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let ins_functions = require('./functions').insert_functions;
 
 //open or create the db file
-let db = new sqlite3.Database(path.join(__dirname,'db/database.db'),(err) => {
+let db = new sqlite3.Database(path.join(__dirname,'db/db_completo.db'),(err) => {
 	if (err) {
     		console.log(err,__dirname);
   	}

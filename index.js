@@ -1,10 +1,13 @@
 let already_ins = false;
 var obj = {content: {}};
+let need_number = ["partita_iva","EAN","peso","CO2","tratta_trasporto","codice","volume","qTerra","qAcqua",
+                    "acidificazione","eutrofizzazione"];
 
 /* form management functions */
 
 function getTable() {
     let opt = $("#selTable option:selected");
+    $('#db_error').hide();
     if(!opt || opt.val() == "-")
         return;
     
@@ -394,11 +397,15 @@ function changeForm() {
 /* code for insertions */
 
 function insert(table) {
+    let correct = true;
     obj.content['table'] = table;
     $('#form input[type="text"], #form select').each((index, elem) => {
         if(elem.id.startsWith('quantita'));
-        obj.content[elem.id] = elem.value;
+        else obj.content[elem.id] = elem.value;
+
+        if(need_number.includes(elem.id) && isNaN(elem.value)) correct = false
     });
+    return correct;
 }
 
 function insertProduct(table) {
@@ -445,44 +452,49 @@ function insertRaw(table) {
 function insertElement(event) {
     event.preventDefault();
     let table = $('#tables').val();
-    insert(table);
-    
-    switch (table) {
-        case "prodotto":
-            insertProduct(table);
-            break;
-        case "materia_prima":
-            insertRaw(table);
-            break;
-        default:
-            break;
+    $('#db_error').hide();
+    if(!insert(table)){
+        $('#db_error').text("Hai inserito una stringa in un campo che necessita un numero");
+        $('#db_error').show();
     }
-
-    $.ajax({
-        type: "POST",
-        url: "/insertData",
-        data: obj,
-        cache: false,
-        success: (data) =>{
-            console.log('ok')
-        },
-        error: (xhr) => {
-            console.log("Codice errore:",xhr.status);
-            $('#db_error').text(xhr.responseText);
-            $('#db_error').show();
+    else{
+        switch (table) {
+            case "prodotto":
+                insertProduct(table);
+                break;
+            case "materia_prima":
+                insertRaw(table);
+                break;
+            default:
+                break;
         }
-    }); 
-
-    $('#form')[0].reset();
-    if(table === "prodotto"){
-        let today = new Date();
-        $('#data').val(String(today.getDate()).padStart(2, '0') + 
-                    '/' + String(today.getMonth() + 1).padStart(2, '0') + 
-                    '/' + String(today.getFullYear()));
+    
+        $.ajax({
+            type: "POST",
+            url: "/insertData",
+            data: obj,
+            cache: false,
+            success: (data) =>{
+                console.log('ok');
+                $('#form')[0].reset();
+                if(table === "prodotto"){
+                    let today = new Date();
+                    $('#data').val(String(today.getDate()).padStart(2, '0') + 
+                                '/' + String(today.getMonth() + 1).padStart(2, '0') + 
+                                '/' + String(today.getFullYear()));
+                }
+            },
+            error: (xhr) => {
+                console.log("Codice errore:",xhr.status);
+                $('#db_error').text(xhr.responseText);
+                $('#db_error').show();
+            }
+        }); 
+    
+        /* Update table in case the user is watching one that he just inserted into */
+        getTable();
     }
-
-    /* Update table in case the user is watching one that he just inserted into */
-    getTable();
+    
 }
 
 
@@ -501,7 +513,7 @@ function add_required_checkbox(index){
         $(`#quantita${index}`).prop('required',false);
     }  
 
-    //At least one materia_prima needs to be selected when a product is inserted
+    //at least one materia_prima needs to be selected when a product is inserted
     let mat_prime_checkbox = $("#materie_prime input[type=checkbox]");
     if($("#materie_prime input[type=checkbox]:checked").length > 0){
         mat_prime_checkbox.prop('required',false);

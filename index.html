@@ -56,7 +56,7 @@
 			<div style=" padding-bottom: 2rem;">
 				<label for="tables" style="font-weight: 900;">Seleziona tabella</label>
 				<select id="tables" onchange="changeForm()">
-					<option value="">---</option>
+					<option value="-">---</option>
 					<option value="produttore">Produttore</option>
 					<option value="fornitore">Fornitore</option>
 					<option value="azienda_trasporti">Azienda di Trasporti</option>
@@ -81,7 +81,7 @@
 		<div style="width:50%; min-height: 100%; float:right; padding: 2rem">
 			<label for="selTable"  style="font-weight: 900;">Visualizza tabella</label>
 			<select id="selTable" onchange="getTable()">
-				<option value="">---</option>
+				<option value="-">---</option>
 				<optgroup route="table" label="Tabelle">
 					<option value="produttore">Produttori</option>
 					<option value="fornitore">Fornitori</option>
