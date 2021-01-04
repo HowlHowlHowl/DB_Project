@@ -478,7 +478,12 @@ function insertElement(event) {
     }); 
 
     $('#form')[0].reset();
-
+    if(table === "prodotto"){
+        let today = new Date();
+        $('#data').val(String(today.getDate()).padStart(2, '0') + 
+                    '/' + String(today.getMonth() + 1).padStart(2, '0') + 
+                    '/' + String(today.getFullYear()));
+    }
     /* Update table in case the user is watching one that he just inserted into */
     getTable();
 }
