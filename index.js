@@ -299,7 +299,7 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="qAcqua">Quantità di acqua (m<sup>3</sup>/kg)</label>
-                    <input type="text" class="form-control" id="qAcqua" placeholder="548" required>
+                    <input type="text" class="form-control" id="qAcqua" placeholder="0.548" required>
                 </div>
                 <div class="form-group">
                     <label for="CO2">Quantità di gas serra prodotta (Kg CO2 eq.)</label>
@@ -362,7 +362,7 @@ function changeForm() {
                 </div>
                 <div class="form-group">
                     <label for="qAcqua">Quantità di acqua (m<sup>3</sup>/kg)</label>
-                    <input type="text" class="form-control" id="qAcqua" placeholder="120">
+                    <input type="text" class="form-control" id="qAcqua" placeholder="0.12">
                 </div>`);
         }
         else if(table == 'fertilizzante' || table == 'pesticida') {
